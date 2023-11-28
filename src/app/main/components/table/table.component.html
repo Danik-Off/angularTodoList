@@ -1,0 +1,34 @@
+<p-table
+  [value]="tasks"
+  [(selection)]="selectedTasks"
+  [paginator]="true"
+  [rows]="5"
+  [showCurrentPageReport]="true"
+  currentPageReportTemplate=" {first} _ {last} "
+  [rowsPerPageOptions]="[10, 25, 50]"
+>
+  <ng-template pTemplate="caption"> Header </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 25%">
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+      </th>
+      <th style="width: 25%">title</th>
+      <th style="width: 25%">priority</th>
+      <th style="width: 25%">category</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-task>
+    <tr>
+      <td>
+        <p-tableCheckbox [value]="task"></p-tableCheckbox>
+      </td>
+      <td>{{ task.id }}</td>
+      <td>{{ task.text }}</td>
+      <td>{{ task.priority }}</td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="paginatorleft">
+    <p-button type="button" label="Add" onclick=""></p-button>
+  </ng-template>
+</p-table>
