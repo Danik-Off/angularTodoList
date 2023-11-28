@@ -1,5 +1,6 @@
 <form [formGroup]="loginForm" class="login-form">
+  <label >Авторизация</label>
   <input type="text" pInputText formControlName="name"/>
-  <p-password formControlName="password" [toggleMask]="true"></p-password>
-  <p-button label="Submit"></p-button>
+  <p-password formControlName="password" [feedback]="false" [toggleMask]="true"></p-password>
+  <p-button label="Войти"></p-button>
 </form>
