@@ -1,0 +1,10 @@
+.app-edit-task-form{
+  display: flex;
+  flex-direction: column;
+  gap:1rem;
+  .btns{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
