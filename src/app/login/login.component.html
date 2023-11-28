@@ -1,0 +1,5 @@
+<form [formGroup]="loginForm" class="login-form">
+  <input type="text" pInputText formControlName="name"/>
+  <p-password formControlName="password" [toggleMask]="true"></p-password>
+  <p-button label="Submit"></p-button>
+</form>
