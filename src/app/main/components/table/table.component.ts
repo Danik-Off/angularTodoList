@@ -8,17 +8,12 @@ import { Task } from 'src/app/interfaces/task';
 import { AuthService } from 'src/app/services/auth.service';
 import { DialogEditTaskService } from 'src/app/services/dialog-edit-task.service';
 import { DialogEditTaskCategoryService } from 'src/app/services/dialog-edit-task-category.service';
-
+import { TaskService } from 'src/app/services/task.service';
 
 @Component({
   selector: 'app-table',
   standalone: true,
-  imports: [
-    ToolbarModule ,
-    CommonModule,
-    TableModule,
-    ButtonModule,
-  ],
+  imports: [ToolbarModule, CommonModule, TableModule, ButtonModule],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
 })
@@ -27,12 +22,18 @@ export class TableComponent {
   selectedTasks!: Task[];
   constructor(
     private dialogService: DialogEditTaskService,
-    private dialogCategoriesService:DialogEditTaskCategoryService
+    private dialogCategoriesService: DialogEditTaskCategoryService,
+    private taskService:TaskService,
   ) {}
-  handlerOpenEditorTaskForNew(){
-    this.dialogService.openDialogEditTask();
-    }
-  handlerOpenEditorTaskCatetories(){
-      this.dialogCategoriesService.openDialogEditTask();
-      }
+  ngOnInit(){
+    this.taskService.allItems$.subscribe((val)=>{
+      this.tasks  =val;
+    })
+  }
+  handlerOpenEditorTaskForNew() {
+    this.dialogService.openDialogEditTask(null);
+  }
+  handlerOpenEditorTaskCatetories() {
+    this.dialogCategoriesService.openDialogEditTask();
+  }
 }
