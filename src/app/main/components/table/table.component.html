@@ -17,6 +17,7 @@
         <th style="width: 25%">
           <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
         </th>
+        <!-- <th style="width: 25%">id</th> -->
         <th style="width: 25%">title</th>
         <th style="width: 25%">priority</th>
         <th style="width: 25%">category</th>
@@ -27,9 +28,10 @@
         <td>
           <p-tableCheckbox [value]="task"></p-tableCheckbox>
         </td>
-        <td>{{ task.id }}</td>
+        <!-- <td>{{ task.id }}</td> -->
         <td>{{ task.text }}</td>
         <td>{{ task.priority }}</td>
+        <td>{{ task.category }}</td>
       </tr>
     </ng-template>
   </p-table>
