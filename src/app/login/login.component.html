@@ -1,7 +1,7 @@
 <form [formGroup]="loginForm" class="login-form">
   <h1>Авторизация</h1>
   <div class="inputs">
-    <input type="text" pInputText formControlName="name" autocomplete="login" />
+    <input type="text" pInputText formControlName="login" autocomplete="login" />
     <p-password
       formControlName="password"
       [style]="{ display: 'flex', flexDirection: 'column' }"
@@ -11,7 +11,7 @@
     ></p-password>
   </div>
 
-  <p-button label="Войти"></p-button>
+  <p-button (onClick)="hadlerLoginBtn()" label="Войти"></p-button>
   <div>
     <span>Еще не зарегистрированы?<a href="/register">Зарегистрироваться</a></span>
   </div>
