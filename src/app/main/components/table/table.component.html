@@ -1,20 +1,17 @@
-<div class="task-table" >
-
+<div class="task-table">
   <p-table
     [value]="tasks"
     [(selection)]="selectedTasks"
     [paginator]="true"
     [rows]="10"
     [rowsPerPageOptions]="[10, 25, 50]"
-
   >
-  <ng-template pTemplate="caption">
-    <div class="head-table">
-       <p-button icon="pi pi-plus" label="add"></p-button>
-        <p-button  label="edit task categories"></p-button>
-
-    </div>
-</ng-template>
+    <ng-template pTemplate="caption">
+      <div class="head-table">
+        <p-button icon="pi pi-plus" label="add" (onClick)="handlerOpenEditorTaskForNew()"></p-button>
+        <p-button label="edit task categories" (onClick)="handlerOpenEditorTaskCatetories()"></p-button>
+      </div>
+    </ng-template>
     <ng-template pTemplate="header">
       <tr>
         <th style="width: 25%">
