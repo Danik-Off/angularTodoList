@@ -7,7 +7,9 @@ import { Task } from '../interfaces/task';
 })
 export class TaskService {
 
-  private allItemsSubject = new BehaviorSubject<Task[]>([]);
+  private allItemsSubject = new BehaviorSubject<Task[]>([
+    {id:"s",text:"example",done:false,priority:0,startDate:new Date(),endDate:new Date(),taskСategoryId:8}
+  ]);
   allItems$ = this.allItemsSubject.asObservable();
 
 
