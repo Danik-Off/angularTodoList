@@ -6,7 +6,10 @@ import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { TaskСategory } from 'src/app/interfaces/taskCategory';
 import { DialogEditTaskService } from 'src/app/services/dialog-edit-task.service';
-import { Observable } from 'rxjs';
+
+import { TaskService } from 'src/app/services/task.service';
+import { Task } from 'src/app/interfaces/task';
+import { CalendarModule } from 'primeng/calendar';
 
 @Component({
   selector: 'app-edit-task',
@@ -17,13 +20,16 @@ import { Observable } from 'rxjs';
     InputTextModule,
     DropdownModule,
     ButtonModule,
+    CalendarModule
   ],
   templateUrl: './edit-task.component.html',
   styleUrl: './edit-task.component.scss',
 })
 export class EditTaskComponent {
-  constructor(private dialogService: DialogEditTaskService) {}
+  constructor(private dialogService: DialogEditTaskService,private taskService:TaskService) {}
   visible: boolean = false;
+
+  openedTask:Task|undefined;
 
   selectedCategory: any;
 
@@ -33,10 +39,9 @@ export class EditTaskComponent {
     this.dialogService.dialogState$.subscribe((value)=>{
       console.log(value)
       this.visible =value
+
     })
   }
 
-  openDialog() {
-    this.dialogService.openDialogEditTask();
-  }
+
 }
