@@ -1,0 +1,30 @@
+<form [formGroup]="registerForm"  class="login-form">
+  <h1>Авторизация</h1>
+  <div class="inputs">
+    <label>Имя</label>
+    <input type="text" pInputText formControlName="name" autocomplete="name" />
+    <label>Логин</label>
+    <input type="text" pInputText formControlName="name" autocomplete="login" />
+    <label>Пароль</label>
+    <p-password
+      formControlName="password"
+      [style]="{ display: 'flex', flexDirection: 'column' }"
+      [feedback]="false"
+      [toggleMask]="true"
+      autocomplete="current-password"
+    ></p-password>
+    <label>Повторите пароль</label>
+    <p-password
+      formControlName="password"
+      [style]="{ display: 'flex', flexDirection: 'column' }"
+      [feedback]="false"
+      [toggleMask]="true"
+      autocomplete="current-password"
+    ></p-password>
+  </div>
+
+  <p-button label="Зарегистрироваться"></p-button>
+  <div>
+    <span>Уже зарегистрированы?<a href="/login">Войти</a></span>
+  </div>
+</form>
