@@ -4,8 +4,10 @@ import { TableComponent } from './components/table/table.component';
 import { EditTaskComponent } from './components/edit-task/edit-task.component';
 import { EditTaskCategoryComponent } from './components/edit-task-category/edit-task-category.component';
 import { MenubarModule } from 'primeng/menubar';
-import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { AuthService } from '../services/auth.service';
+
+
 @Component({
   selector: 'app-main',
   standalone: true,
@@ -14,5 +16,13 @@ import { ButtonModule } from 'primeng/button';
   styleUrl: './main.component.scss'
 })
 export class MainComponent {
+constructor(private authService:AuthService){
+console.log(this.authService.getUser())
+}
+handlerSingOutBtn(){
+this.authService.logout();
+}
+
+userName= this.authService.getUser()?.name;
 
 }
