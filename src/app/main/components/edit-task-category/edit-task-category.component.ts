@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
-import { TaskСategory } from '../../interfaces/taskCategory';
+
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
+import { TaskСategory } from 'src/app/interfaces/taskCategory';
 @Component({
   selector: 'app-edit-task-category',
   standalone: true,
