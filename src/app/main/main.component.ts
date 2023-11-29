@@ -6,23 +6,32 @@ import { EditTaskCategoryComponent } from './components/edit-task-category/edit-
 import { MenubarModule } from 'primeng/menubar';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../services/auth.service';
-
+import { DialogEditTaskService } from '../services/dialog-edit-task.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [CommonModule,TableComponent,EditTaskComponent,EditTaskCategoryComponent,MenubarModule,ButtonModule],
+  imports: [
+    CommonModule,
+    TableComponent,
+    EditTaskComponent,
+    EditTaskCategoryComponent,
+    MenubarModule,
+    ButtonModule,
+  ],
   templateUrl: './main.component.html',
-  styleUrl: './main.component.scss'
+  styleUrl: './main.component.scss',
 })
 export class MainComponent {
-constructor(private authService:AuthService){
-console.log(this.authService.getUser())
-}
-handlerSingOutBtn(){
-this.authService.logout();
-}
+  constructor(
+    private authService: AuthService,
+    private dialogService: DialogEditTaskService,
+  ) {}
 
-userName= this.authService.getUser()?.name;
+  handlerSingOutBtn() {
+    this.authService.logout();
+  }
 
+  userName = this.authService.getUser()?.name;
 }
