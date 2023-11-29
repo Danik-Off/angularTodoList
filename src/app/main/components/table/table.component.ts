@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
-import { Task } from '../../interfaces/task';
+
 import { ButtonModule } from 'primeng/button';
 import { ToolbarModule } from 'primeng/toolbar';
+import { Task } from 'src/app/interfaces/task';
+
 
 @Component({
   selector: 'app-table',
@@ -13,7 +15,6 @@ import { ToolbarModule } from 'primeng/toolbar';
     CommonModule,
     TableModule,
     ButtonModule,
-
   ],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
