@@ -13,7 +13,7 @@ import { TaskСategory } from '../../interfaces/taskCategory';
   styleUrl: './edit-task.component.scss'
 })
 export class EditTaskComponent {
-  visible: boolean = true;
+  visible: boolean = false;
   selectedCategory:any;
   taskCategories:TaskСategory[] = [];
 }

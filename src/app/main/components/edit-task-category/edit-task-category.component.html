@@ -1,1 +1,16 @@
-<p>edit-task-category works!</p>
+<p-dialog
+  header="Edit task"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ maxWidth: '400px' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <form class="app-edit-task-form">
+    <span>id {{ !visible ? visible : "#" }}</span>
+    <input type="text" pInputText formControlName="title"/>
+    <input type="text" pInputText formControlName="name"/>
+    <p-dropdown [options]="taskCategories" [style]="{width:'100%'}"  optionLabel="name" [showClear]="true" placeholder="Select a City"></p-dropdown>
+    <div class="btns"><p-button label="cancel" severity="danger" ></p-button><p-button label="save" severity="success"></p-button></div>
+  </form>
+</p-dialog>
