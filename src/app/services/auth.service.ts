@@ -1,67 +1,63 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '../interfaces/user';
-
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private isAuthenticated: boolean = false;
-  private user: User | undefined;
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
+  private userSubject = new BehaviorSubject<User | undefined>(undefined);
 
-  constructor(private router: Router) {
-    // Ваш код инициализации компонента
-  }
+  isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+  user$ = this.userSubject.asObservable();
+
+  constructor(private router: Router) {}
 
   getUsers(): User[] {
     const USERS_JSON = localStorage.getItem('users');
     return JSON.parse(USERS_JSON ? USERS_JSON : '[]') as User[];
   }
 
-  //обьект авторизованного пользователя
   getUser() {
-    return this.user;
+    return this.userSubject.value;
   }
 
-  //регистрация нового пользователя
   register(name: string, login: string, password: string) {
-    this.isAuthenticated = true;
-    console.log(this.isAuthenticated);
-    this.user = {
+    const user: User = {
       id: crypto.randomUUID() as string,
       name: name,
       login: login,
       password: password,
     };
-    const NEW_USERS = this.getUsers();
-    NEW_USERS.push(this.user);
-    localStorage.setItem('users', JSON.stringify(NEW_USERS));
+
+    const newUsers = [...this.getUsers(), user];
+    localStorage.setItem('users', JSON.stringify(newUsers));
+
+    this.userSubject.next(user);
+    this.isAuthenticatedSubject.next(true);
 
     this.router.navigate(['/']);
   }
 
-  //локальная авторизация пользователей
   login(login: string, password: string) {
-    console.log("ok");
     const user = this.getUsers().find((user) => user.login === login);
-    if (user && user.password === password) {
-      this.user = user;
-      this.isAuthenticated = true;
-      this.router.navigate(['/']);
 
-    } else {
+    if (user && user.password === password) {
+      this.userSubject.next(user);
+      this.isAuthenticatedSubject.next(true);
+      this.router.navigate(['/']);
     }
   }
 
-  //выйти из аккаунта
   logout() {
-    this.isAuthenticated = false;
-    this.user = undefined;
+    this.isAuthenticatedSubject.next(false);
+    this.userSubject.next(undefined);
+    this.router.navigate(['/login']);
   }
 
-  // проверка , авторизован ли пользователь
-  isAuthenticatedUser(): boolean {
-    return this.isAuthenticated;
+  isAuthenticatedUser(): Observable<boolean> {
+    return this.isAuthenticatedSubject.asObservable();
   }
 }
