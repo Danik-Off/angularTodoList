@@ -6,7 +6,7 @@
   [draggable]="false"
   [resizable]="false"
 >
-  <form [formGroup]="editTaskForm" class="app-edit-task-form">
+  <form  [formGroup]="editTaskForm" class="app-edit-task-form">
     <span>id {{ id ?id : "#" }}</span>
     <label>текст</label>
     <input type="text" pInputText formControlName="text" />
@@ -14,9 +14,9 @@
     <input type="text" pInputText  formControlName="priority"/>
     <div>
       <label>С</label>
-      <p-calendar [showTime]="true" [showSeconds]="true" formControlName="startDate"></p-calendar>
+      <p-calendar [showTime]="true"  appendTo="body"  [style]="{zIndex:'100'}" [showSeconds]="true"  formControlName="startDate"></p-calendar>
       <label>До</label>
-      <p-calendar [showTime]="true" [showSeconds]="true"></p-calendar>
+      <p-calendar [showTime]="true" appendTo="body" [showSeconds]="true" formControlName="endDate"></p-calendar>
     </div>
     <p-dropdown
       [options]="taskCategories"
