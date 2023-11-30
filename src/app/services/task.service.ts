@@ -1,27 +1,26 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Task } from '../interfaces/task';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TaskService {
+
+
+
   private allItemsSubject = new BehaviorSubject<Task[]>([]);
   allItems$ = this.allItemsSubject.asObservable();
 
-  constructor() {
+  constructor(private authService:AuthService) {
     this.load();
+    authService.user$.subscribe(()=>{
+      this.load();
+    })
   }
 
-  chooseAll(choosenAll: boolean) {
-    console.log('e');
-    const updatedItems = this.allItemsSubject.value.map((item) => ({
-      ...item,
-      done: choosenAll,
-    }));
-    this.allItemsSubject.next(updatedItems);
-    this.save();
-  }
+
 
   addItem(
     text: string,
@@ -88,14 +87,16 @@ export class TaskService {
   }
 
   save() {
+    let user = this.authService.getUser();
     localStorage.setItem(
-      'todoItems',
+      'todoItems-'+user?.id,
       JSON.stringify(this.allItemsSubject.value),
     );
   }
 
   load() {
-    const localStorageData = localStorage.getItem('todoItems');
+    let user = this.authService.getUser();
+    const localStorageData = localStorage.getItem(  'todoItems-'+user?.id,);
     if (localStorageData) {
       try {
         const parsedData = JSON.parse(localStorageData) as Task[];
