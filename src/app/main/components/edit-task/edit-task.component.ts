@@ -28,7 +28,6 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
   styleUrl: './edit-task.component.scss',
 })
 export class EditTaskComponent {
-
   constructor(
     private dialogService: DialogEditTaskService,
     private taskService: TaskService,
@@ -38,15 +37,15 @@ export class EditTaskComponent {
 
   editTaskForm = new FormGroup({
     id: new FormControl(),
-   done: new FormControl(),
+    done: new FormControl(),
     text: new FormControl(),
     priority: new FormControl(1),
-    startDate: new FormControl(new Date( Date.now())),
-    endDate: new FormControl(new Date( Date.now())),
+    startDate: new FormControl(new Date(Date.now())),
+    endDate: new FormControl(new Date(Date.now())),
     taskСategoryId: new FormControl('test'),
   });
 
-  visible: boolean = false;
+  visible: boolean = true;
 
   selectedCategory: any;
 
@@ -57,13 +56,11 @@ export class EditTaskComponent {
       if (value) {
         this.id = value;
         let task = this.taskService.getItem(value);
-        this.editTaskForm.setValue({...task});
-
+        this.editTaskForm.setValue({ ...task });
+      } else {
+        this.id = null;
       }
-      else{
-        this.id =null;
-      }
-      this.visible = true;
+      this.visible = !this.visible;
     });
   }
 
@@ -95,7 +92,6 @@ export class EditTaskComponent {
         new Date(endDate),
         taskСategoryId,
       );
-
     }
   }
 
