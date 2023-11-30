@@ -8,6 +8,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TaskСategory } from 'src/app/interfaces/taskCategory';
 import { DialogEditTaskService } from 'src/app/services/dialog-edit-task.service';
 import { DialogEditTaskCategoryService } from 'src/app/services/dialog-edit-task-category.service';
+import { TaskCategoriesService } from 'src/app/services/task-categories.service';
 @Component({
   selector: 'app-edit-task-category',
   standalone: true,
@@ -22,15 +23,21 @@ import { DialogEditTaskCategoryService } from 'src/app/services/dialog-edit-task
   styleUrl: './edit-task-category.component.scss',
 })
 export class EditTaskCategoryComponent {
-  constructor(private dialogService: DialogEditTaskCategoryService) {}
-  visible: boolean = false;
+  constructor(
+    private dialogService: DialogEditTaskCategoryService,
+    private taskCategoriesService: TaskCategoriesService,
+  ) {}
+  visible: boolean = true;
   selectedCategory: any;
   taskCategories: TaskСategory[] = [];
 
   ngOnInit() {
-    this.dialogService.dialogState$.subscribe((value)=>{
-      console.log(value)
-      this.visible =value
-    })
+    this.dialogService.dialogState$.subscribe((value) => {
+      console.log(value);
+      // this.visible =value
+    });
+    this.taskCategoriesService.categories$.subscribe((value) => {
+      this.taskCategories = value;
+    });
   }
 }
