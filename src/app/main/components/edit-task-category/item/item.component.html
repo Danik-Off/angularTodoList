@@ -1,0 +1,16 @@
+<li>
+  <label #label (dblclick)="onEdit()" [hidden]="isEdited">
+    {{ editedText}}
+  </label>
+  <input
+    (keydown.enter)="onEditEnd()"
+    (blur)="onEditEnd()"
+    [hidden]="!isEdited"
+    type="text"
+    #inputText
+    [value]="editedText"
+    name="someName"
+    [(ngModel)]="editedText"
+  />
+  <button (click)="onDelete()">&times;</button>
+</li>

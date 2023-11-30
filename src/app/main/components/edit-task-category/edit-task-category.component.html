@@ -9,12 +9,8 @@
   <div class="app-edit-task-categories-form">
 
     <div>
-      <div *ngFor="let category of taskCategories" class="item">
-        <label> {{ category.title }}</label
-        ><p-button  severity="danger" icon="pi pi-trash"></p-button>
-      </div>
-
+      <app-item  *ngFor="let category of taskCategories" [category]="category"></app-item>
     </div>
-    <p-button class="add">Добавить</p-button>
+    <p-button class="add" (onClick)="handlerAddBtn()">Добавить</p-button>
   </div>
 </p-dialog>

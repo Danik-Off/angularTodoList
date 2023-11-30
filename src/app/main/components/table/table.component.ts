@@ -6,10 +6,15 @@ import { ButtonModule } from 'primeng/button';
 import { ToolbarModule } from 'primeng/toolbar';
 import { Task } from 'src/app/interfaces/task';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ConfirmationService, MessageService, ConfirmEventType } from 'primeng/api';
+import {
+  ConfirmationService,
+  MessageService,
+  ConfirmEventType,
+} from 'primeng/api';
 import { DialogEditTaskService } from 'src/app/services/dialog-edit-task.service';
 import { DialogEditTaskCategoryService } from 'src/app/services/dialog-edit-task-category.service';
 import { TaskService } from 'src/app/services/task.service';
+import { TaskCategoriesService } from 'src/app/services/task-categories.service';
 
 @Component({
   selector: 'app-table',
@@ -23,7 +28,7 @@ import { TaskService } from 'src/app/services/task.service';
   ],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
-  providers: [ConfirmationService]
+  providers: [ConfirmationService],
 })
 export class TableComponent {
   tasks!: Task[];
@@ -34,18 +39,31 @@ export class TableComponent {
     private dialogService: DialogEditTaskService,
     private dialogCategoriesService: DialogEditTaskCategoryService,
     private taskService: TaskService,
+    private categoryService: TaskCategoriesService,
   ) {}
 
   ngOnInit() {
     this.taskService.allItems$.subscribe((val) => {
       this.tasks = val;
-      this.selectedTasks = val.filter((task) => {
-        return task.done;
-      });
-      console.log(val);
+      this.updateTasks();
+    });
+    this.categoryService.categories$.subscribe((val) => {
+      this.updateTasks();
     });
   }
-  handlerOpenEditorTask(id:string){
+  updateTasks(){
+
+    this.selectedTasks = this.tasks.filter((task) => {
+      return task.done;
+    });
+    this.tasks = this.tasks.map((item) => {
+      return {
+        ...item,
+        category: this.categoryService.get(item.taskСategoryId)?.title,
+      };
+    });
+  }
+  handlerOpenEditorTask(id: string) {
     this.dialogService.openDialogEditTask(id);
   }
   handlerOpenEditorTaskForNew() {
@@ -56,26 +74,19 @@ export class TableComponent {
     this.dialogCategoriesService.openDialogEditTask();
   }
 
-  handlerSelectedChange(c:any)
-  {
-
-    this.taskService.editStatusItem(this.selectedTasks)
-
+  handlerSelectedChange(c: any) {
+    this.taskService.editStatusItem(this.selectedTasks);
   }
 
-  confirmDelete(id:string) {
+  confirmDelete(id: string) {
     this.confirmationService.confirm({
-        message: 'Do you want to delete this record?',
-        header: 'Delete Confirmation',
-        icon: 'pi pi-info-circle',
-        accept: () => {
-          this.taskService.deleteItem(id)
-        },
-        reject: () => {
-
-            }
-        }
-    );
-}
-
+      message: 'Do you want to delete this record?',
+      header: 'Delete Confirmation',
+      icon: 'pi pi-info-circle',
+      accept: () => {
+        this.taskService.deleteItem(id);
+      },
+      reject: () => {},
+    });
+  }
 }

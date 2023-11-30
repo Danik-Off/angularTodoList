@@ -1,0 +1,15 @@
+li{
+  display: flex;
+  padding: 1rex;
+  width: 300px;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 1px solid black;
+  button{
+    font-size: 1rem;
+  }
+  label,input[type=text]{
+  width: 100%;
+  text-align: center;
+  }
+}
