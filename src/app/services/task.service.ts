@@ -70,9 +70,11 @@ export class TaskService {
     this.save();
   }
 
-  editStatusItem(id: number, done: boolean) {
-    const updatedItems = this.allItemsSubject.value.map((item, index) =>
-      index === id ? { ...item, done } : item,
+  editStatusItem(selectedTasks:Task[]) {
+    console.log(selectedTasks);
+    const idsSelected = selectedTasks.map((item)=>item.id)
+    const updatedItems = this.allItemsSubject.value.map((item) =>
+    idsSelected.includes(item.id)?{...item,done:true}:{...item,done:false}
     );
     this.allItemsSubject.next(updatedItems);
     this.save();

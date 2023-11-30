@@ -56,6 +56,12 @@ export class TableComponent {
     this.dialogCategoriesService.openDialogEditTask();
   }
 
+  handlerSelectedChange(c:any)
+  {
+
+    this.taskService.editStatusItem(this.selectedTasks)
+
+  }
 
   confirmDelete(id:string) {
     this.confirmationService.confirm({

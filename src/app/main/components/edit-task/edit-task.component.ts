@@ -56,7 +56,8 @@ export class EditTaskComponent {
       if (value) {
         this.id = value;
         let task = this.taskService.getItem(value);
-        this.editTaskForm.setValue({ ...task });
+        this.editTaskForm.setValue({ ...task,startDate:new Date(task.startDate),endDate:new Date(task.endDate) });
+        console.log(task)
       } else {
         this.id = null;
       }
