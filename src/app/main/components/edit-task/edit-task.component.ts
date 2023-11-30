@@ -37,10 +37,12 @@ export class EditTaskComponent {
   id: string | null = null;
 
   editTaskForm = new FormGroup({
+    id: new FormControl(),
+   done: new FormControl(),
     text: new FormControl(),
     priority: new FormControl(1),
-    startDate: new FormControl(Date.now()),
-    endDate: new FormControl(Date.now()),
+    startDate: new FormControl(new Date( Date.now())),
+    endDate: new FormControl(new Date( Date.now())),
     taskСategoryId: new FormControl('test'),
   });
 
@@ -53,6 +55,13 @@ export class EditTaskComponent {
   ngOnInit() {
     this.dialogService.dialogState$.subscribe((value) => {
       if (value) {
+        this.id = value;
+        let task = this.taskService.getItem(value);
+        this.editTaskForm.setValue({...task});
+
+      }
+      else{
+        this.id =null;
       }
       this.visible = true;
     });
@@ -68,6 +77,7 @@ export class EditTaskComponent {
     } else {
       this.createNew();
     }
+    this.visible = false;
   }
 
   createNew() {
@@ -85,7 +95,7 @@ export class EditTaskComponent {
         new Date(endDate),
         taskСategoryId,
       );
-      this.visible = false;
+
     }
   }
 

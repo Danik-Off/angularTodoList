@@ -13,18 +13,6 @@ export class TaskService {
     this.load();
   }
 
-  filter: 'all' | 'active' | 'done' = 'all';
-  allSelected: boolean = false;
-
-  get items(): Task[] {
-    if (this.filter === 'all') {
-      return this.allItemsSubject.value;
-    }
-    return this.allItemsSubject.value.filter((item) =>
-      this.filter === 'done' ? item.done : !item.done,
-    );
-  }
-
   chooseAll(choosenAll: boolean) {
     console.log('e');
     const updatedItems = this.allItemsSubject.value.map((item) => ({
@@ -33,10 +21,6 @@ export class TaskService {
     }));
     this.allItemsSubject.next(updatedItems);
     this.save();
-  }
-
-  setFilter(newFilter: 'all' | 'active' | 'done'): void {
-    this.filter = newFilter;
   }
 
   addItem(
@@ -59,11 +43,29 @@ export class TaskService {
     this.allItemsSubject.next(updatedItems);
     this.save();
   }
+  getItem(id: string): Task {
+    return this.allItemsSubject.value.filter((item) => item.id === id)[0];
+  }
 
-  editItem(id: string, text: string,priority:number, startDate:Date,endDate:Date,taskСategoryId:string) {
-    const updatedItems = this.allItemsSubject.value.filter(
-      (item) => item.id !== id ? { ...item, text, priority, startDate,  endDate,
-        taskСategoryId } : item,
+  editItem(
+    id: string,
+    text: string,
+    priority: number,
+    startDate: Date,
+    endDate: Date,
+    taskСategoryId: string,
+  ) {
+    const updatedItems = this.allItemsSubject.value.map((item) =>
+      item.id === id
+        ? {
+            ...item,
+            text,
+            priority: priority,
+            startDate: startDate,
+            endDate: endDate,
+            taskСategoryId: taskСategoryId,
+          }
+        : item,
     );
     this.allItemsSubject.next(updatedItems);
     this.save();
@@ -78,13 +80,11 @@ export class TaskService {
   }
 
   deleteItem(id: string) {
-
-      const updatedItems = this.allItemsSubject.value.filter(
-        (item) => item.id !== id,
-      );
-      this.allItemsSubject.next(updatedItems);
-      this.save();
-
+    const updatedItems = this.allItemsSubject.value.filter(
+      (item) => item.id !== id,
+    );
+    this.allItemsSubject.next(updatedItems);
+    this.save();
   }
 
   save() {
