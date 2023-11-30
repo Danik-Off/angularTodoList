@@ -1,15 +1,29 @@
-<div class="task-table">
+<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
+<div class="task-table" [style]="{ height: '100vh' }">
+
   <p-table
+    styleClass="p-column-resizer-helper"
     [value]="tasks"
     [(selection)]="selectedTasks"
     [paginator]="true"
     [rows]="10"
     [rowsPerPageOptions]="[10, 25, 50]"
+
   >
+
+
+
     <ng-template pTemplate="caption">
       <div class="head-table">
-        <p-button icon="pi pi-plus" label="add" (onClick)="handlerOpenEditorTaskForNew()"></p-button>
-        <p-button label="edit task categories" (onClick)="handlerOpenEditorTaskCatetories()"></p-button>
+        <p-button
+          icon="pi pi-plus"
+          label="add"
+          (onClick)="handlerOpenEditorTaskForNew()"
+        ></p-button>
+        <p-button
+          label="edit task categories"
+          (onClick)="handlerOpenEditorTaskCatetories()"
+        ></p-button>
       </div>
     </ng-template>
     <ng-template pTemplate="header">
@@ -17,21 +31,26 @@
         <th style="width: 25%">
           <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
         </th>
-        <!-- <th style="width: 25%">id</th> -->
-        <th style="width: 25%">title</th>
-        <th style="width: 25%">priority</th>
-        <th style="width: 25%">category</th>
+
+        <th pSortableColumn="text" style="width:20%">text <p-sortIcon field="text"></p-sortIcon></th>
+        <th pSortableColumn="priority" style="width:20%">приоритет <p-sortIcon field="priority"></p-sortIcon></th>
+        <th pSortableColumn="category" style="width:20%">категория <p-sortIcon field="category"></p-sortIcon></th>
+
+
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-task>
       <tr>
         <td>
-          <p-tableCheckbox [value]="task"></p-tableCheckbox>
+          <p-tableCheckbox  [value]="task"></p-tableCheckbox>
         </td>
-        <!-- <td>{{ task.id }}</td> -->
         <td>{{ task.text }}</td>
         <td>{{ task.priority }}</td>
         <td>{{ task.category }}</td>
+        <td>
+          <p-button icon="pi pi-pencil" (click)="handlerOpenEditorTask(task.id)"></p-button
+          ><p-button icon="pi pi-times" (click)="confirmDelete(task.id)"></p-button>
+        </td>
       </tr>
     </ng-template>
   </p-table>
