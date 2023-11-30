@@ -3,15 +3,15 @@ import { BehaviorSubject } from 'rxjs';
 import { Task } from '../interfaces/task';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TaskService {
-
-  private allItemsSubject = new BehaviorSubject<Task[]>([
-    {id:"s",text:"example",done:false,priority:0,startDate:new Date(),endDate:new Date(),taskСategoryId:8}
-  ]);
+  private allItemsSubject = new BehaviorSubject<Task[]>([]);
   allItems$ = this.allItemsSubject.asObservable();
 
+  constructor() {
+    this.load();
+  }
 
   filter: 'all' | 'active' | 'done' = 'all';
   allSelected: boolean = false;
@@ -21,28 +21,16 @@ export class TaskService {
       return this.allItemsSubject.value;
     }
     return this.allItemsSubject.value.filter((item) =>
-      this.filter === 'done' ? item.done : !item.done
+      this.filter === 'done' ? item.done : !item.done,
     );
   }
 
-  ngOnInit() {
-    this.load();
-  }
-
-  ngDoCheck() {
-    if (this.allItemsSubject.value.length > 0) {
-      const doneCount = this.allItemsSubject.value.reduce((acc, item) => {
-        if (item.done) acc++;
-        return acc;
-      }, 0);
-
-      this.allSelected = doneCount === this.allItemsSubject.value.length;
-    }
-  }
-
   chooseAll(choosenAll: boolean) {
-    console.log("e")
-    const updatedItems = this.allItemsSubject.value.map((item) => ({ ...item, done: choosenAll }));
+    console.log('e');
+    const updatedItems = this.allItemsSubject.value.map((item) => ({
+      ...item,
+      done: choosenAll,
+    }));
     this.allItemsSubject.next(updatedItems);
     this.save();
   }
@@ -51,43 +39,59 @@ export class TaskService {
     this.filter = newFilter;
   }
 
-  addItem(text: string) {
+  addItem(
+    text: string,
+    priority: number,
+    startDate: Date,
+    endDate: Date,
+    taskСategoryId: string,
+  ) {
     const newItem: Task = {
       id: crypto.randomUUID(),
       text: text,
       done: false,
-      priority: 0,
-      startDate: new Date(),
-      endDate: new Date(),
-      taskСategoryId: 0
+      priority: priority,
+      startDate: startDate,
+      endDate: endDate,
+      taskСategoryId: taskСategoryId,
     };
     const updatedItems = [newItem, ...this.allItemsSubject.value];
     this.allItemsSubject.next(updatedItems);
     this.save();
   }
 
-  editTextItem(id: number, text: string) {
-    const updatedItems = this.allItemsSubject.value.map((item, index) => index === id ? { ...item, text } : item);
+  editItem(id: string, text: string,priority:number, startDate:Date,endDate:Date,taskСategoryId:string) {
+    const updatedItems = this.allItemsSubject.value.filter(
+      (item) => item.id !== id ? { ...item, text, priority, startDate,  endDate,
+        taskСategoryId } : item,
+    );
     this.allItemsSubject.next(updatedItems);
     this.save();
   }
 
   editStatusItem(id: number, done: boolean) {
-    const updatedItems = this.allItemsSubject.value.map((item, index) => index === id ? { ...item, done } : item);
+    const updatedItems = this.allItemsSubject.value.map((item, index) =>
+      index === id ? { ...item, done } : item,
+    );
     this.allItemsSubject.next(updatedItems);
     this.save();
   }
 
-  deleteItem(id: number) {
-    if (id >= 0 && id < this.items.length) {
-      const updatedItems = this.allItemsSubject.value.filter((item, index) => index !== id);
+  deleteItem(id: string) {
+
+      const updatedItems = this.allItemsSubject.value.filter(
+        (item) => item.id !== id,
+      );
       this.allItemsSubject.next(updatedItems);
       this.save();
-    }
+
   }
 
   save() {
-    localStorage.setItem('todoItems', JSON.stringify(this.allItemsSubject.value));
+    localStorage.setItem(
+      'todoItems',
+      JSON.stringify(this.allItemsSubject.value),
+    );
   }
 
   load() {
