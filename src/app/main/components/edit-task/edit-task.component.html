@@ -21,9 +21,10 @@
     <p-dropdown
       [options]="taskCategories"
       [style]="{ width: '100%' }"
-      optionLabel="name"
+      optionLabel="title"
       [showClear]="true"
       placeholder="выберите категорию"
+      formControlName="taskСategory"
     ></p-dropdown>
     <div class="btns">
       <p-button (onClick)="handlerCancelBtn()" label="cancel" severity="danger"></p-button

@@ -9,7 +9,7 @@ import { AuthService } from './auth.service';
 export class TaskCategoriesService {
   constructor(private authService: AuthService) {}
   categoties = new BehaviorSubject<TaskСategory[]>([
-    {id:"",title:"test"}
+    {id:"testIdID",title:"test"}
   ]);
 
   categories$ = this.categoties.asObservable();
@@ -24,6 +24,9 @@ export class TaskCategoriesService {
     this.categoties.next(updatedItems);
     this.save();
   }
+  get(id:string):TaskСategory{
+    return this.categoties.value.filter((item)=>item.id===id)[0];
+  }
 
   edit() {}
   delete() {}
@@ -31,14 +34,14 @@ export class TaskCategoriesService {
   save() {
     let user = this.authService.getUser();
     localStorage.setItem(
-      'todoItems-' + user?.id,
+      'todoCategories-' + user?.id,
       JSON.stringify(this.categoties.value),
     );
   }
 
   load() {
     let user = this.authService.getUser();
-    const localStorageData = localStorage.getItem('todoItems-' + user?.id);
+    const localStorageData = localStorage.getItem( 'todoCategories-' + user?.id);
     if (localStorageData) {
       try {
         const parsedData = JSON.parse(localStorageData) as TaskСategory[];

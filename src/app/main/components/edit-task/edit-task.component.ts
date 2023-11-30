@@ -11,6 +11,7 @@ import { TaskService } from 'src/app/services/task.service';
 import { Task } from 'src/app/interfaces/task';
 import { CalendarModule } from 'primeng/calendar';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { TaskCategoriesService } from 'src/app/services/task-categories.service';
 
 @Component({
   selector: 'app-edit-task',
@@ -30,19 +31,20 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 export class EditTaskComponent {
   constructor(
     private dialogService: DialogEditTaskService,
+    private categoriesService: TaskCategoriesService,
     private taskService: TaskService,
   ) {}
 
   id: string | null = null;
 
   editTaskForm = new FormGroup({
-    id: new FormControl(),
+
     done: new FormControl(),
     text: new FormControl(),
     priority: new FormControl(1),
     startDate: new FormControl(new Date(Date.now())),
     endDate: new FormControl(new Date(Date.now())),
-    taskСategoryId: new FormControl('test'),
+    taskСategory: new FormControl(),
   });
 
   visible: boolean = true;
@@ -56,12 +58,25 @@ export class EditTaskComponent {
       if (value) {
         this.id = value;
         let task = this.taskService.getItem(value);
-        this.editTaskForm.setValue({ ...task,startDate:new Date(task.startDate),endDate:new Date(task.endDate) });
-        console.log(task)
+        let category = this.categoriesService.get(task.taskСategoryId)??"default";
+        console.log(category);
+        this.editTaskForm.setValue({
+
+          done:task.done,
+          priority:task.priority,
+          text:task.text,
+          startDate: new Date(task.startDate),
+          endDate: new Date(task.endDate),
+          taskСategory:category
+         });
+        console.log(task);
       } else {
         this.id = null;
       }
       this.visible = !this.visible;
+    });
+    this.categoriesService.categories$.subscribe((val) => {
+      this.taskCategories = val;
     });
   }
 
@@ -83,15 +98,15 @@ export class EditTaskComponent {
     let priority = this.editTaskForm.get('priority')?.value;
     let startDate = this.editTaskForm.get('startDate')?.value;
     let endDate = this.editTaskForm.get('endDate')?.value;
-    let taskСategoryId = this.editTaskForm.get('taskСategoryId')?.value;
+    let taskСategory = this.editTaskForm.get('taskСategory')?.value as TaskСategory|undefined;
 
-    if (!!text && !!priority && !!startDate && endDate && !!taskСategoryId) {
+    if (!!text && !!priority && !!startDate && endDate && !!taskСategory) {
       this.taskService.addItem(
         text,
         priority,
         new Date(startDate),
         new Date(endDate),
-        taskСategoryId,
+        taskСategory.id,
       );
     }
   }
@@ -101,15 +116,15 @@ export class EditTaskComponent {
     let priority = this.editTaskForm.get('priority')?.value;
     let startDate = this.editTaskForm.get('startDate')?.value;
     let endDate = this.editTaskForm.get('endDate')?.value;
-    let taskСategoryId = this.editTaskForm.get('taskСategoryId')?.value;
-
+    let taskСategory = this.editTaskForm.get('taskСategory')?.value ;
+    let taskСategoryId = taskСategory?taskСategory.id:null;
+    console.log(taskСategory)
     if (
       this.id &&
       !!text &&
       !!priority &&
       !!startDate &&
-      endDate &&
-      !!taskСategoryId
+      !!endDate
     )
       this.taskService.editItem(
         this.id,
@@ -117,7 +132,9 @@ export class EditTaskComponent {
         priority,
         new Date(startDate),
         new Date(endDate),
-        taskСategoryId,
+        taskСategoryId
+
       );
+
   }
 }
