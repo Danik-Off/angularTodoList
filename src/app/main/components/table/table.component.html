@@ -8,7 +8,7 @@
     [paginator]="true"
     [rows]="10"
     [rowsPerPageOptions]="[10, 25, 50]"
-    (selectionChange)="handlerSelectedChange(this)"
+    (selectionChange)="handlerSelectedChange()"
   >
 
 
@@ -35,6 +35,8 @@
         <th pSortableColumn="text" style="width:20%">text <p-sortIcon field="text"></p-sortIcon></th>
         <th pSortableColumn="priority" style="width:20%">приоритет <p-sortIcon field="priority"></p-sortIcon></th>
         <th pSortableColumn="category" style="width:20%">категория <p-sortIcon field="category"></p-sortIcon></th>
+        <th pSortableColumn="category" style="width:20%">срок<p-sortIcon field="category"></p-sortIcon></th>
+        <th pSortableColumn="category" style="width:20%"><p-sortIcon field="category"></p-sortIcon></th>
 
 
       </tr>
@@ -47,6 +49,7 @@
         <td>{{ task.text }}</td>
         <td>{{ task.priority }}</td>
         <td>{{ task.category }}</td>
+        <td>{{ task.startDate }}<br>{{ task.endDate }}</td>
         <td>
           <p-button icon="pi pi-pencil" (click)="handlerOpenEditorTask(task.id)"></p-button
           ><p-button icon="pi pi-times" (click)="confirmDelete(task.id)"></p-button>
