@@ -45,17 +45,21 @@ export class TableComponent {
   ngOnInit() {
     this.taskService.allItems$.subscribe((val) => {
       this.tasks = val;
-      this.updateTasks();
+
+      this.selectedTasks = val.filter((task) => {
+        console.log(task.done)
+        return task.done;
+      });
+      console.log(val)
+      this.updateTasks()
     });
+
     this.categoryService.categories$.subscribe((val) => {
       this.updateTasks();
     });
+
   }
   updateTasks(){
-
-    this.selectedTasks = this.tasks.filter((task) => {
-      return task.done;
-    });
     this.tasks = this.tasks.map((item) => {
       return {
         ...item,
@@ -74,7 +78,7 @@ export class TableComponent {
     this.dialogCategoriesService.openDialogEditTask();
   }
 
-  handlerSelectedChange(c: any) {
+  handlerSelectedChange() {
     this.taskService.editStatusItem(this.selectedTasks);
   }
 
