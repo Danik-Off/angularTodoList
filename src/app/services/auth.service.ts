@@ -7,7 +7,7 @@ import { User } from '../interfaces/user';
   providedIn: 'root',
 })
 export class AuthService {
-  private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(true);
   private userSubject = new BehaviorSubject<User | undefined>(undefined);
 
   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
@@ -57,7 +57,7 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
-  isAuthenticatedUser(): Observable<boolean> {
-    return this.isAuthenticatedSubject.asObservable();
+  isAuthenticatedUser(): boolean {
+    return this.isAuthenticatedSubject.value;
   }
 }
