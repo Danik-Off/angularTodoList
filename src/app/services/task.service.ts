@@ -7,20 +7,15 @@ import { AuthService } from './auth.service';
   providedIn: 'root',
 })
 export class TaskService {
-
-
-
   private allItemsSubject = new BehaviorSubject<Task[]>([]);
   allItems$ = this.allItemsSubject.asObservable();
 
-  constructor(private authService:AuthService) {
+  constructor(private authService: AuthService) {
     this.load();
-    authService.user$.subscribe(()=>{
+    authService.user$.subscribe(() => {
       this.load();
-    })
+    });
   }
-
-
 
   addItem(
     text: string,
@@ -70,11 +65,13 @@ export class TaskService {
     this.save();
   }
 
-  editStatusItem(selectedTasks:Task[]) {
+  editStatusItem(selectedTasks: Task[]) {
     console.log(selectedTasks);
-    const idsSelected = selectedTasks.map((item)=>item.id)
+    const idsSelected = selectedTasks.map((item) => item.id);
     const updatedItems = this.allItemsSubject.value.map((item) =>
-    idsSelected.includes(item.id)?{...item,done:true}:{...item,done:false}
+      idsSelected.includes(item.id)
+        ? { ...item, done: true }
+        : { ...item, done: false },
     );
     this.allItemsSubject.next(updatedItems);
     this.save();
@@ -91,14 +88,14 @@ export class TaskService {
   save() {
     let user = this.authService.getUser();
     localStorage.setItem(
-      'todoItems-'+user?.id,
+      'todoItems-' + user?.id,
       JSON.stringify(this.allItemsSubject.value),
     );
   }
 
   load() {
     let user = this.authService.getUser();
-    const localStorageData = localStorage.getItem(  'todoItems-'+user?.id,);
+    const localStorageData = localStorage.getItem('todoItems-' + user?.id);
     if (localStorageData) {
       try {
         const parsedData = JSON.parse(localStorageData) as Task[];
