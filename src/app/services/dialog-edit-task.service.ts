@@ -6,14 +6,11 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class DialogEditTaskService {
   constructor() {}
-  private dialogStateSubject = new BehaviorSubject<boolean>(false);
+  private dialogStateSubject = new BehaviorSubject<string|null>(null);
   dialogState$ = this.dialogStateSubject.asObservable();
 
   openDialogEditTask(id:string|null) {
-    this.dialogStateSubject.next(true);
+    this.dialogStateSubject.next(id);
   }
 
-  closeDialogEditTask() {
-    this.dialogStateSubject.next(false);
-  }
 }
