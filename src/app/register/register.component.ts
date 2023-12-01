@@ -13,6 +13,9 @@ import { PasswordModule } from 'primeng/password';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../services/auth.service';
+import { RegisterForm } from '../interfaces/register-form';
+
+
 
 @Component({
   selector: 'app-register',
@@ -28,44 +31,43 @@ import { AuthService } from '../services/auth.service';
   styleUrl: './register.component.scss',
 })
 export class RegisterComponent {
-  constructor(private authService: AuthService) {
-    // Ваш код инициализации компонента
-  }
+  constructor(private authService: AuthService) {}
+
   //проверка на совпадение паролей
-  checkPasswords: ValidatorFn = (group: AbstractControl):  ValidationErrors | null => {
+  checkPasswords: ValidatorFn = (
+    group: AbstractControl,
+  ): ValidationErrors | null => {
     let pass = group.get('password')?.value;
-    let confirmPass = group.get('confirmPassword')?.value
-    return pass === confirmPass ? null : { notSame: true }
-  }
+    let confirmPass = group.get('repeatPassword')?.value;
+    return pass === confirmPass ? null : { notSame: true };
+  };
 
-
-  registerForm = new FormGroup({
-    login: new FormControl(null, [
-      Validators.required,
-      Validators.minLength(5), // Пример минимальной длины
-    ]),
+  registerForm = new FormGroup<RegisterForm>({
     name: new FormControl(null, [
       Validators.required,
-      Validators.maxLength(50), // Пример максимальной длины
+      Validators.minLength(2),
+      Validators.maxLength(10),
     ]),
-    password: new FormControl(null, [
+    login: new FormControl(null, [
       Validators.required,
-
+      Validators.minLength(5),
     ]),
+    password: new FormControl(null, [Validators.required]),
     repeatPassword: new FormControl(null, [
       Validators.required,
-       // Пример требований к паролю
-     this.checkPasswords
+      this.checkPasswords,
     ]),
   });
 
   handlerRegisterBtn() {
-    let name = this.registerForm.get('name')?.value;
-    let login = this.registerForm.get('login')?.value;
-    let password = this.registerForm.get('password')?.value;
+    if (this.registerForm.valid) {
+      let name = this.registerForm.get('name')?.value;
+      let login = this.registerForm.get('login')?.value;
+      let password = this.registerForm.get('password')?.value;
 
-    if (!!name && !!login && !!password) {
-      this.authService.register(name, login, password);
+      if (!!name && !!login && !!password)
+        this.authService.register(name, login, password);
+    } else {
     }
   }
 }
