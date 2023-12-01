@@ -38,7 +38,6 @@ export class EditTaskComponent {
   id: string | null = null;
 
   editTaskForm = new FormGroup({
-
     done: new FormControl(),
     text: new FormControl(),
     priority: new FormControl(1),
@@ -137,5 +136,16 @@ export class EditTaskComponent {
 
       );
 
+  }
+  clearForm(){
+    this.editTaskForm.setValue({
+
+      done:false,
+      priority:null,
+      text:null,
+      startDate: new Date(Date.now()),
+      endDate: new Date(Date.now()),
+      taskСategory:null,
+     });
   }
 }
