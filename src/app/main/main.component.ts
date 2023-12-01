@@ -7,7 +7,7 @@ import { MenubarModule } from 'primeng/menubar';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../services/auth.service';
 import { DialogEditTaskService } from '../services/dialog-edit-task.service';
-import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-main',
