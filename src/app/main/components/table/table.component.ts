@@ -15,6 +15,7 @@ import { DialogEditTaskService } from 'src/app/services/dialog-edit-task.service
 import { DialogEditTaskCategoryService } from 'src/app/services/dialog-edit-task-category.service';
 import { TaskService } from 'src/app/services/task.service';
 import { TaskCategoriesService } from 'src/app/services/task-categories.service';
+import { TaskСategory } from 'src/app/interfaces/taskCategory';
 
 @Component({
   selector: 'app-table',
@@ -34,6 +35,8 @@ export class TableComponent {
   tasks!: Task[];
   selectedTasks!: Task[];
 
+  categories!:TaskСategory[];
+
   constructor(
     private confirmationService: ConfirmationService,
     private dialogService: DialogEditTaskService,
@@ -50,23 +53,19 @@ export class TableComponent {
         console.log(task.done)
         return task.done;
       });
-      console.log(val)
-      this.updateTasks()
+
     });
 
     this.categoryService.categories$.subscribe((val) => {
-      this.updateTasks();
+     this.categories = val;
     });
 
   }
-  updateTasks(){
-    this.tasks = this.tasks.map((item) => {
-      return {
-        ...item,
-        category: this.categoryService.get(item.taskСategoryId)?.title,
-      };
-    });
+  getCategories(task:Task):string{
+    let id = task.taskСategoryId;
+    return this.categories.filter((item)=> item.id ===id)[0]?.title;
   }
+
   handlerOpenEditorTask(id: string) {
     this.dialogService.openDialogEditTask(id);
   }

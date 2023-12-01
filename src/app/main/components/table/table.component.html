@@ -48,7 +48,7 @@
         </td>
         <td>{{ task.text }}</td>
         <td>{{ task.priority }}</td>
-        <td>{{ task.category }}</td>
+        <td>{{  getCategories(task)  }}</td>
         <td>{{ task.startDate }}<br>{{ task.endDate }}</td>
         <td>
           <p-button icon="pi pi-pencil" (click)="handlerOpenEditorTask(task.id)"></p-button

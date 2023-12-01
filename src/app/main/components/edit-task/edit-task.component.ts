@@ -98,15 +98,16 @@ export class EditTaskComponent {
     let priority = this.editTaskForm.get('priority')?.value;
     let startDate = this.editTaskForm.get('startDate')?.value;
     let endDate = this.editTaskForm.get('endDate')?.value;
-    let taskСategory = this.editTaskForm.get('taskСategory')?.value as TaskСategory|undefined;
+    let taskСategory = this.editTaskForm.get('taskСategory')?.value ;
+    let taskСategoryId = taskСategory?taskСategory.id:null;
 
-    if (!!text && !!priority && !!startDate && endDate && !!taskСategory) {
+    if (!!text && !!priority && !!startDate && endDate ) {
       this.taskService.addItem(
         text,
         priority,
         new Date(startDate),
         new Date(endDate),
-        taskСategory.id,
+        taskСategoryId
       );
     }
   }
