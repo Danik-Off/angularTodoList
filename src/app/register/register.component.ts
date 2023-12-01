@@ -35,10 +35,11 @@ export class RegisterComponent {
 
   //проверка на совпадение паролей
   checkPasswords: ValidatorFn = (
-    group: AbstractControl,
+    controlConfirmPassword : AbstractControl,
   ): ValidationErrors | null => {
-    let pass = group.get('password')?.value;
-    let confirmPass = group.get('repeatPassword')?.value;
+    let group = controlConfirmPassword.parent;
+    let pass = group?.get('password')?.value;
+    let confirmPass = controlConfirmPassword?.value;
     return pass === confirmPass ? null : { notSame: true };
   };
 
