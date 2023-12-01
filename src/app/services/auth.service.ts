@@ -7,7 +7,7 @@ import { User } from '../interfaces/user';
   providedIn: 'root',
 })
 export class AuthService {
-  private isAuthenticatedSubject = new BehaviorSubject<boolean>(true);
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   private userSubject = new BehaviorSubject<User | undefined>(undefined);
 
   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
