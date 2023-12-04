@@ -60,15 +60,14 @@ export class RegisterComponent {
     ]),
   });
 
-  handlerRegisterBtn() {
+  handlerRegisterBtn():void  {
     if (this.registerForm.valid) {
       let name = this.registerForm.get('name')?.value;
       let login = this.registerForm.get('login')?.value;
       let password = this.registerForm.get('password')?.value;
 
-      if (!!name && !!login && !!password)
+      if (name && login && password)
         this.authService.register(name, login, password);
-    } else {
     }
   }
 }
