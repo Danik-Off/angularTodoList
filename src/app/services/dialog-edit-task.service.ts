@@ -9,7 +9,7 @@ export class DialogEditTaskService {
   private dialogStateSubject = new BehaviorSubject<string|null>(null);
   dialogState$ = this.dialogStateSubject.asObservable();
 
-  openDialogEditTask(id:string|null) {
+  openDialogEditTask(id:string|null):void  {
     this.dialogStateSubject.next(id);
   }
 
