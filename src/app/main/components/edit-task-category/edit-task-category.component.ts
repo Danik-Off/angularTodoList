@@ -45,7 +45,7 @@ export class EditTaskCategoryComponent {
     });
   }
 
-  handlerAddBtn(){
+  handlerAddBtn():void {
  this.taskCategoriesService.add("default");
   }
 }
