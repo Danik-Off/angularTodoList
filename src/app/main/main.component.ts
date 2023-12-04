@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableComponent } from './components/table/table.component';
 import { EditTaskComponent } from './components/edit-task/edit-task.component';
@@ -6,7 +6,6 @@ import { EditTaskCategoryComponent } from './components/edit-task-category/edit-
 import { MenubarModule } from 'primeng/menubar';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../services/auth.service';
-import { DialogEditTaskService } from '../services/dialog-edit-task.service';
 
 
 @Component({
@@ -23,15 +22,22 @@ import { DialogEditTaskService } from '../services/dialog-edit-task.service';
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss',
 })
-export class MainComponent {
+export class MainComponent implements OnInit{
+
+  userName!:string;
+
   constructor(
     private authService: AuthService,
-    private dialogService: DialogEditTaskService,
   ) {}
 
-  handlerSingOutBtn() {
+  ngOnInit(): void {
+    this.authService.user$.subscribe((user)=>{
+      this.userName = user? user.name: "Unknown user";
+    })
+  }
+
+  handlerSingOutBtn():void  {
     this.authService.logout();
   }
 
-  userName = this.authService.getUser()?.name;
 }
