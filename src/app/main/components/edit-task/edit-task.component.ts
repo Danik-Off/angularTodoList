@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
@@ -28,7 +28,7 @@ import { TaskCategoriesService } from 'src/app/services/task-categories.service'
   templateUrl: './edit-task.component.html',
   styleUrl: './edit-task.component.scss',
 })
-export class EditTaskComponent {
+export class EditTaskComponent implements OnInit {
   constructor(
     private dialogService: DialogEditTaskService,
     private categoriesService: TaskCategoriesService,
@@ -48,7 +48,7 @@ export class EditTaskComponent {
 
   visible: boolean = true;
 
-  selectedCategory: any;
+  selectedCategory!: TaskСategory[];
 
   taskCategories: TaskСategory[] = [];
 
@@ -58,7 +58,7 @@ export class EditTaskComponent {
         this.id = value;
         let task = this.taskService.getItem(value);
         let category = this.categoriesService.get(task.taskСategoryId)??"default";
-        console.log(category);
+
         this.editTaskForm.setValue({
 
           done:task.done,
@@ -79,11 +79,11 @@ export class EditTaskComponent {
     });
   }
 
-  handlerCancelBtn() {
+  handlerCancelBtn():void  {
     this.visible = false;
   }
 
-  handlerSaveBtn() {
+  handlerSaveBtn():void  {
     if (!!this.id) {
       this.editTask();
     } else {
@@ -92,7 +92,7 @@ export class EditTaskComponent {
     this.visible = false;
   }
 
-  createNew() {
+  createNew():void  {
     let text = this.editTaskForm.get('text')?.value;
     let priority = this.editTaskForm.get('priority')?.value;
     let startDate = this.editTaskForm.get('startDate')?.value;
@@ -111,20 +111,20 @@ export class EditTaskComponent {
     }
   }
 
-  editTask() {
+  editTask():void  {
     let text = this.editTaskForm.get('text')?.value;
     let priority = this.editTaskForm.get('priority')?.value;
     let startDate = this.editTaskForm.get('startDate')?.value;
     let endDate = this.editTaskForm.get('endDate')?.value;
     let taskСategory = this.editTaskForm.get('taskСategory')?.value ;
     let taskСategoryId = taskСategory?taskСategory.id:null;
-    console.log(taskСategory)
+
     if (
       this.id &&
-      !!text &&
-      !!priority &&
-      !!startDate &&
-      !!endDate
+      text &&
+      priority &&
+      startDate &&
+      endDate
     )
       this.taskService.editItem(
         this.id,
@@ -137,7 +137,7 @@ export class EditTaskComponent {
       );
 
   }
-  clearForm(){
+  clearForm():void {
     this.editTaskForm.setValue({
 
       done:false,
