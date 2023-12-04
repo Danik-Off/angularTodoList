@@ -23,7 +23,7 @@ export class LoginComponent {
     login: new FormControl(null),
     password: new FormControl(null),
   });
-  hadlerLoginBtn(){
+  hadlerLoginBtn():void {
     let login = this.loginForm.get("login")?.value
     let password = this.loginForm.get("password")?.value
     if(!!login && !!password)
