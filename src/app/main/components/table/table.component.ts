@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 
@@ -31,7 +31,7 @@ import { TaskСategory } from 'src/app/interfaces/taskCategory';
   styleUrl: './table.component.scss',
   providers: [ConfirmationService],
 })
-export class TableComponent {
+export class TableComponent implements OnInit {
   tasks!: Task[];
   selectedTasks!: Task[];
 
@@ -45,7 +45,7 @@ export class TableComponent {
     private categoryService: TaskCategoriesService,
   ) {}
 
-  ngOnInit() {
+  ngOnInit():void  {
     this.taskService.allItems$.subscribe((val) => {
       this.tasks = val;
 
@@ -62,26 +62,27 @@ export class TableComponent {
 
   }
   getCategories(task:Task):string{
-    let id = task.taskСategoryId;
-    return this.categories.filter((item)=> item.id ===id)[0]?.title;
+    const ID = task.taskСategoryId;
+    return this.categories.filter((item)=> item.id === ID)[0]?.title;
   }
 
-  handlerOpenEditorTask(id: string) {
+  handlerOpenEditorTask(id: string):void  {
     this.dialogService.openDialogEditTask(id);
   }
-  handlerOpenEditorTaskForNew() {
+
+  handlerOpenEditorTaskForNew():void  {
     this.dialogService.openDialogEditTask(null);
   }
 
-  handlerOpenEditorTaskCatetories() {
+  handlerOpenEditorTaskCatetories():void  {
     this.dialogCategoriesService.openDialogEditTask();
   }
 
-  handlerSelectedChange() {
+  handlerSelectedChange():void  {
     this.taskService.editStatusItem(this.selectedTasks);
   }
 
-  confirmDelete(id: string) {
+  confirmDelete(id: string):void  {
     this.confirmationService.confirm({
       message: 'Do you want to delete this record?',
       header: 'Delete Confirmation',
