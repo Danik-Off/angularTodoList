@@ -6,6 +6,8 @@ import { EditTaskCategoryComponent } from './components/edit-task-category/edit-
 import { MenubarModule } from 'primeng/menubar';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../services/auth.service';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -22,19 +24,16 @@ import { AuthService } from '../services/auth.service';
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss',
 })
-export class MainComponent implements OnInit{
+export class MainComponent {
 
-  userName!:string;
+  userName$: Observable<string> = this.authService.user$.pipe(
+    map(user => user ? user.name : "Unknown user")
+  );
 
   constructor(
     private authService: AuthService,
   ) {}
 
-  ngOnInit(): void {
-    this.authService.user$.subscribe((user)=>{
-      this.userName = user? user.name: "Unknown user";
-    })
-  }
 
   handlerSingOutBtn():void  {
     this.authService.logout();
