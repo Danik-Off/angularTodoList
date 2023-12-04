@@ -20,7 +20,9 @@ export class AuthService {
     return JSON.parse(USERS_JSON ? USERS_JSON : '[]') as User[];
   }
 
-
+  getUser():User | null {
+    return this.userSubject.value;
+  }
 
   register(name: string, login: string, password: string):void {
     const user: User = {
