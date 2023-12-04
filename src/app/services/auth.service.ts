@@ -8,9 +8,9 @@ import { User } from '../interfaces/user';
 })
 export class AuthService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
-  private userSubject = new BehaviorSubject<User | undefined>(undefined);
+  private userSubject = new BehaviorSubject<User | null>(null);
 
-  isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+
   user$ = this.userSubject.asObservable();
 
   constructor(private router: Router) {}
@@ -20,11 +20,9 @@ export class AuthService {
     return JSON.parse(USERS_JSON ? USERS_JSON : '[]') as User[];
   }
 
-  getUser() {
-    return this.userSubject.value;
-  }
 
-  register(name: string, login: string, password: string) {
+
+  register(name: string, login: string, password: string):void {
     const user: User = {
       id: crypto.randomUUID() as string,
       name: name,
@@ -41,7 +39,7 @@ export class AuthService {
     this.router.navigate(['/']);
   }
 
-  login(login: string, password: string) {
+  login(login: string, password: string):void  {
     const user = this.getUsers().find((user) => user.login === login);
 
     if (user && user.password === password) {
@@ -51,9 +49,9 @@ export class AuthService {
     }
   }
 
-  logout() {
+  logout():void  {
     this.isAuthenticatedSubject.next(false);
-    this.userSubject.next(undefined);
+    this.userSubject.next(null);
     this.router.navigate(['/login']);
   }
 
