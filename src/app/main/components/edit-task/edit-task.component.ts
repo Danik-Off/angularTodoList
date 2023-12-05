@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
-import { TaskСategory } from 'src/app/interfaces/taskCategory';
+import { TaskCategory } from 'src/app/interfaces/taskCategory';
 import { DialogEditTaskService } from 'src/app/services/dialog-edit-task.service';
 
 import { TaskService } from 'src/app/services/task.service';
@@ -12,6 +12,10 @@ import { Task } from 'src/app/interfaces/task';
 import { CalendarModule } from 'primeng/calendar';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TaskCategoriesService } from 'src/app/services/task-categories.service';
+import { Subject, takeUntil } from 'rxjs';
+import { BUTTON_LABEL_CANCEL, BUTTON_LABEL_SAVE, LABEL_END_DATE, LABEL_ID, LABEL_PRIORITY, LABEL_START_DATE, LABEL_TEXT, TITLE_EDIT_TASK } from 'src/app/shared/constants';
+
+
 
 @Component({
   selector: 'app-edit-task',
@@ -28,13 +32,7 @@ import { TaskCategoriesService } from 'src/app/services/task-categories.service'
   templateUrl: './edit-task.component.html',
   styleUrl: './edit-task.component.scss',
 })
-export class EditTaskComponent implements OnInit {
-  constructor(
-    private dialogService: DialogEditTaskService,
-    private categoriesService: TaskCategoriesService,
-    private taskService: TaskService,
-  ) {}
-
+export class EditTaskComponent implements OnInit, OnDestroy {
   id: string | null = null;
 
   editTaskForm = new FormGroup({
@@ -46,45 +44,71 @@ export class EditTaskComponent implements OnInit {
     taskСategory: new FormControl(),
   });
 
+  titleDialog:string = TITLE_EDIT_TASK;
+
+  buttonLabelSave:string = BUTTON_LABEL_SAVE;
+  buttonLabelCancel:string = BUTTON_LABEL_CANCEL;
+
+  idLabel:string = LABEL_ID;
+  textLabel:string = LABEL_TEXT;
+  priorityLabel:string = LABEL_PRIORITY;
+  startDateLabel:string = LABEL_START_DATE;
+  endDateLabel:string = LABEL_END_DATE;
+
   visible: boolean = true;
 
-  selectedCategory!: TaskСategory[];
+  selectedCategory!: TaskCategory[];
 
-  taskCategories: TaskСategory[] = [];
+  taskCategories: TaskCategory[] = [];
 
-  ngOnInit() {
-    this.dialogService.dialogState$.subscribe((value) => {
-      if (value) {
-        this.id = value;
-        let task = this.taskService.getItem(value);
-        let category = this.categoriesService.get(task.taskСategoryId)??"default";
+  private unsubscribe = new Subject<void>();
 
-        this.editTaskForm.setValue({
+  constructor(
+    private dialogService: DialogEditTaskService,
+    private categoriesService: TaskCategoriesService,
+    private taskService: TaskService,
+  ) {}
 
-          done:task.done,
-          priority:task.priority,
-          text:task.text,
-          startDate: new Date(task.startDate),
-          endDate: new Date(task.endDate),
-          taskСategory:category
-         });
-        console.log(task);
-      } else {
-        this.id = null;
-      }
-      this.visible = !this.visible;
-    });
-    this.categoriesService.categories$.subscribe((val) => {
-      this.taskCategories = val;
-    });
+  ngOnInit(): void {
+    this.dialogService.dialogState$
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe((value) => {
+
+
+        if (value) {
+          this.id = value;
+          const TASK = this.taskService.getItem(value);
+          const CATEGORY =
+            this.categoriesService.get(TASK.categoryId) ?? 'default';
+
+          this.editTaskForm.setValue({
+            done: TASK.done,
+            priority: TASK.priority,
+            text: TASK.text,
+            startDate: new Date(TASK.startDate),
+            endDate: new Date(TASK.endDate),
+            taskСategory: CATEGORY,
+          });
+        } else {
+          this.id = null;
+        }
+        console.log(this.visible)
+        this.visible = !this.visible;
+      });
+
+    this.categoriesService.categories$
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe((val) => {
+        this.taskCategories = val;
+      });
   }
 
-  handlerCancelBtn():void  {
+  handlerCancelBtn(): void {
     this.visible = false;
   }
 
-  handlerSaveBtn():void  {
-    if (!!this.id) {
+  handlerSaveBtn(): void {
+    if (this.id) {
       this.editTask();
     } else {
       this.createNew();
@@ -92,60 +116,56 @@ export class EditTaskComponent implements OnInit {
     this.visible = false;
   }
 
-  createNew():void  {
-    let text = this.editTaskForm.get('text')?.value;
-    let priority = this.editTaskForm.get('priority')?.value;
-    let startDate = this.editTaskForm.get('startDate')?.value;
-    let endDate = this.editTaskForm.get('endDate')?.value;
-    let taskСategory = this.editTaskForm.get('taskСategory')?.value ;
-    let taskСategoryId = taskСategory?taskСategory.id:null;
+  createNew(): void {
+    const TEXT = this.editTaskForm.get('text')?.value;
+    const PRIORITY = this.editTaskForm.get('priority')?.value;
+    const START_DATE = this.editTaskForm.get('startDate')?.value;
+    const END_DATE = this.editTaskForm.get('endDate')?.value;
+    const TASK_CATEGORY = this.editTaskForm.get('taskСategory')?.value;
+    const TASK_CATEGORY_ID = TASK_CATEGORY ? TASK_CATEGORY.id : null;
 
-    if (!!text && !!priority && !!startDate && endDate ) {
+    if (TEXT && PRIORITY && START_DATE && END_DATE) {
       this.taskService.addItem(
-        text,
-        priority,
-        new Date(startDate),
-        new Date(endDate),
-        taskСategoryId
+        TEXT,
+        PRIORITY,
+        new Date(START_DATE),
+        new Date(END_DATE),
+        TASK_CATEGORY_ID,
       );
     }
   }
 
-  editTask():void  {
-    let text = this.editTaskForm.get('text')?.value;
-    let priority = this.editTaskForm.get('priority')?.value;
-    let startDate = this.editTaskForm.get('startDate')?.value;
-    let endDate = this.editTaskForm.get('endDate')?.value;
-    let taskСategory = this.editTaskForm.get('taskСategory')?.value ;
-    let taskСategoryId = taskСategory?taskСategory.id:null;
+  editTask(): void {
+    const TEXT = this.editTaskForm.get('text')?.value;
+    const PRIORITY = this.editTaskForm.get('priority')?.value;
+    const START_DATE = this.editTaskForm.get('startDate')?.value;
+    const END_DATE = this.editTaskForm.get('endDate')?.value;
+    const TASK_CATEGORY = this.editTaskForm.get('taskСategory')?.value;
+    const TASK_CATEGORY_ID = TASK_CATEGORY ? TASK_CATEGORY.id : null;
 
-    if (
-      this.id &&
-      text &&
-      priority &&
-      startDate &&
-      endDate
-    )
+    if (this.id && TEXT && PRIORITY && START_DATE && END_DATE)
       this.taskService.editItem(
         this.id,
-        text,
-        priority,
-        new Date(startDate),
-        new Date(endDate),
-        taskСategoryId
-
+        TEXT,
+        PRIORITY,
+        new Date(START_DATE),
+        new Date(END_DATE),
+        TASK_CATEGORY_ID,
       );
-
   }
-  clearForm():void {
+  clearForm(): void {
     this.editTaskForm.setValue({
-
-      done:false,
-      priority:null,
-      text:null,
+      done: false,
+      priority: null,
+      text: null,
       startDate: new Date(Date.now()),
       endDate: new Date(Date.now()),
-      taskСategory:null,
-     });
+      taskСategory: null,
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 }
