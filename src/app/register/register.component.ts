@@ -26,6 +26,7 @@ import {
   LABEL_CONFIRM_PASSWORD,
 } from '../shared/constants';
 
+
 @Component({
   selector: 'app-register',
   standalone: true,
