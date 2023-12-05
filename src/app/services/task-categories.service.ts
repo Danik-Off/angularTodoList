@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import {  TaskCategory } from '../interfaces/taskCategory';
-import { AuthService } from './auth.service';
+import { User } from '../interfaces/user';
 
 const STORAGE_CATEGORIES_KEY = 'todoCategories-';
 @Injectable({
@@ -9,15 +9,16 @@ const STORAGE_CATEGORIES_KEY = 'todoCategories-';
 })
 
 export class TaskCategoriesService {
-  constructor(private authService: AuthService) {
-    this.load();
-  }
 
   categories = new BehaviorSubject<TaskCategory[]>([
     { id: 'testIdID', title: 'test' },
   ]);
 
   categories$ = this.categories.asObservable();
+  private user!:User;
+
+  constructor() {
+  }
 
   add(title: string):void  {
     const category: TaskCategory = {
@@ -30,7 +31,6 @@ export class TaskCategoriesService {
     this.save();
   }
   get(id: string): TaskCategory {
-    console.log(this.categories.value.filter((item) => item.id === id)[0]);
     return this.categories.value.filter((item) => item.id === id)[0];
   }
 
@@ -53,16 +53,11 @@ export class TaskCategoriesService {
     this.save();
   }
 
-  save():void  {
-    let user = this.authService.getUser();
-    localStorage.setItem(
-      STORAGE_CATEGORIES_KEY  + user?.id,
-      JSON.stringify(this.categories.value),
-    );
-  }
 
-  load():void  {
-    let user = this.authService.getUser();
+
+  load(user:User) :void {
+
+    this.user = user;
     const localStorageData = localStorage.getItem(STORAGE_CATEGORIES_KEY  + user?.id);
     if (localStorageData) {
       try {
@@ -74,5 +69,12 @@ export class TaskCategoriesService {
         console.error('Ошибка:', error);
       }
     }
+  }
+  private  save():void  {
+
+    localStorage.setItem(
+      STORAGE_CATEGORIES_KEY  + this.user?.id,
+      JSON.stringify(this.categories.value),
+    );
   }
 }
