@@ -1,6 +1,5 @@
 <p-confirmDialog></p-confirmDialog>
-<div class="task-table" >
-
+<div class="task-table">
   <p-table
     styleClass="p-column-resizer-helper"
     [value]="tasks"
@@ -10,19 +9,16 @@
     [rowsPerPageOptions]="[10, 25, 50]"
     (selectionChange)="handlerSelectedChange()"
   >
-
-
-
     <ng-template pTemplate="caption">
       <div class="head-table">
         <p-button
           icon="pi pi-plus"
-          label="add"
+          [label]="addLabelBtn"
           (onClick)="handlerOpenEditorTaskForNew()"
         ></p-button>
         <p-button
-          label="edit task categories"
-          (onClick)="handlerOpenEditorTaskCatetories()"
+          [label]="editTaskCategoriesLabelBtn"
+          (onClick)="handlerOpenEditorTaskCategories()"
         ></p-button>
       </div>
     </ng-template>
@@ -32,27 +28,37 @@
           <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
         </th>
 
-        <th pSortableColumn="text" style="width:20%">text <p-sortIcon field="text"></p-sortIcon></th>
-        <th pSortableColumn="priority" style="width:20%">приоритет <p-sortIcon field="priority"></p-sortIcon></th>
-        <th pSortableColumn="category" style="width:20%">категория <p-sortIcon field="category"></p-sortIcon></th>
-        <th pSortableColumn="category" style="width:20%">срок<p-sortIcon field="category"></p-sortIcon></th>
-        <th pSortableColumn="category" style="width:20%"><p-sortIcon field="category"></p-sortIcon></th>
-
-
+        <th pSortableColumn="text">
+          {{ textLabelTh }} <p-sortIcon field="text"></p-sortIcon>
+        </th>
+        <th pSortableColumn="priority">
+          {{ priorityLabelTh }} <p-sortIcon field="priority"></p-sortIcon>
+        </th>
+        <th pSortableColumn="category">
+          {{ categoryLabelTh }}<p-sortIcon field="category"></p-sortIcon>
+        </th>
+        <th>{{ deadlineLabelTh }}<p-sortIcon></p-sortIcon></th>
+        <th><p-sortIcon></p-sortIcon></th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-task>
       <tr>
         <td>
-          <p-tableCheckbox  [value]="task"></p-tableCheckbox>
+          <p-tableCheckbox [value]="task"></p-tableCheckbox>
         </td>
         <td>{{ task.text }}</td>
         <td>{{ task.priority }}</td>
-        <td>{{  getCategories(task)  }}</td>
-        <td>{{ task.startDate }}<br>{{ task.endDate }}</td>
+        <td>{{ getCategories(task) }}</td>
+        <td>{{ task.startDate }}<br />{{ task.endDate }}</td>
         <td>
-          <p-button icon="pi pi-pencil" (click)="handlerOpenEditorTask(task.id)"></p-button
-          ><p-button icon="pi pi-times" (click)="confirmDelete(task.id)"></p-button>
+          <p-button
+            icon="pi pi-pencil"
+            (click)="handlerOpenEditorTask(task.id)"
+          ></p-button
+          ><p-button
+            icon="pi pi-times"
+            (click)="confirmDelete(task.id)"
+          ></p-button>
         </td>
       </tr>
     </ng-template>

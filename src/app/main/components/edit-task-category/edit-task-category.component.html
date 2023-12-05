@@ -1,16 +1,17 @@
 <p-dialog
-  header="Edit task  Categories"
+  [header]="titleDialog"
   [(visible)]="visible"
   [modal]="true"
   [style]="{ maxWidth: '400px' }"
   [draggable]="false"
   [resizable]="false"
+
 >
   <div class="app-edit-task-categories-form">
 
     <div>
       <app-item  *ngFor="let category of taskCategories" [category]="category"></app-item>
     </div>
-    <p-button class="add" (onClick)="handlerAddBtn()">Добавить</p-button>
+    <p-button class="add" (onClick)="handlerAddBtn()" [label]="addLabelBtn"></p-button>
   </div>
 </p-dialog>

@@ -1,5 +1,5 @@
 <p-dialog
-  header="Edit task"
+  [header]="titleDialog"
   [(visible)]="visible"
   [modal]="true"
   [style]="{ maxWidth: '400px' }"
@@ -7,15 +7,15 @@
   [resizable]="false"
 >
   <form  [formGroup]="editTaskForm" class="app-edit-task-form">
-    <span>id {{ id ?id : "#" }}</span>
-    <label>текст</label>
+    <span>{{idLabel}}{{ id ?id : "#" }}</span>
+    <label>{{textLabel}}</label>
     <input type="text" pInputText formControlName="text" />
-    <label>приоритет</label>
+    <label>{{priorityLabel}}</label>
     <input type="text" pInputText  formControlName="priority"/>
     <div>
-      <label>С</label>
+      <label>{{startDateLabel}}</label>
       <p-calendar [showTime]="true"  appendTo="body"  [style]="{zIndex:'100'}" [showSeconds]="true"  formControlName="startDate"></p-calendar>
-      <label>До</label>
+      <label>{{endDateLabel}}</label>
       <p-calendar [showTime]="true" appendTo="body" [showSeconds]="true" formControlName="endDate"></p-calendar>
     </div>
     <p-dropdown
@@ -27,8 +27,8 @@
       formControlName="taskСategory"
     ></p-dropdown>
     <div class="btns">
-      <p-button (onClick)="handlerCancelBtn()" label="cancel" severity="danger"></p-button
-      ><p-button (onClick)="handlerSaveBtn()" label="save" severity="success"></p-button>
+      <p-button (onClick)="handlerCancelBtn()" [label]="buttonLabelCancel" severity="danger"></p-button
+      ><p-button (onClick)="handlerSaveBtn()" [label]="buttonLabelSave" severity="success"></p-button>
     </div>
   </form>
 </p-dialog>

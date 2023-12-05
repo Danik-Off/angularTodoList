@@ -1,11 +1,11 @@
 <form [formGroup]="registerForm"  class="login-form">
-  <h1>Авторизация</h1>
+  <h1>{{titleLabel}}</h1>
   <div class="inputs">
-    <label>Имя</label>
+    <label>{{labelName}}</label>
     <input type="text" pInputText formControlName="name" autocomplete="name" />
-    <label>Логин</label>
+    <label>{{labelLogin}}</label>
     <input type="text" pInputText formControlName="login" autocomplete="login" />
-    <label>Пароль</label>
+    <label>{{labelPassword}}</label>
     <p-password
       formControlName="password"
       [style]="{ display: 'flex', flexDirection: 'column' }"
@@ -13,7 +13,7 @@
       [toggleMask]="true"
       autocomplete="current-password"
     ></p-password>
-    <label>Повторите пароль</label>
+    <label>{{labelRepeatPassword}}</label>
     <p-password
       formControlName="repeatPassword"
       [style]="{ display: 'flex', flexDirection: 'column' }"
@@ -24,8 +24,8 @@
     ></p-password>
   </div>
 
-  <p-button (onClick)=" handlerRegisterBtn()" label="Зарегистрироваться"></p-button>
+  <p-button (onClick)=" handlerRegisterBtn()"  [label]="loginLabelBtn"></p-button>
   <div>
-    <span>Уже зарегистрированы?<a href="/login">Войти</a></span>
+    <span>{{subtext}}<a href="/login">{{linkLabel}}</a></span>
   </div>
 </form>

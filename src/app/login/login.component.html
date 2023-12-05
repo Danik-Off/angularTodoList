@@ -1,5 +1,5 @@
 <form [formGroup]="loginForm" class="login-form">
-  <h1>Авторизация</h1>
+  <h1>{{titleLabel}}</h1>
   <div class="inputs">
     <input type="text" pInputText formControlName="login" autocomplete="login" />
     <p-password
@@ -11,8 +11,8 @@
     ></p-password>
   </div>
 
-  <p-button (onClick)="hadlerLoginBtn()" label="Войти"></p-button>
+  <p-button (onClick)="handlerLoginBtn()" [label]="loginLabelBtn"></p-button>
   <div>
-    <span>Еще не зарегистрированы?<a href="/register">Зарегистрироваться</a></span>
+    <span>{{subtext}}<a href="/register">{{linkLabel}}</a></span>
   </div>
 </form>
