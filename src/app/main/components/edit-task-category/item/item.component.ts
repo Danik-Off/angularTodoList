@@ -1,7 +1,7 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TaskCategoriesService } from 'src/app/services/task-categories.service';
-import { TaskСategory } from 'src/app/interfaces/taskCategory';
+import { TaskCategory } from 'src/app/interfaces/taskCategory';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -11,29 +11,32 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './item.component.html',
   styleUrl: './item.component.scss'
 })
-export class ItemComponent {
+export class ItemComponent implements  OnInit {
+
+  isEdited: boolean = false;
+
+  editedText: string = ''; // Отдельное поле для редактирования текста
+
+  @Input() category?: TaskCategory;
+
+  @ViewChild('inputText') inputText!: ElementRef;
+
 
   constructor(
     private categoryService:TaskCategoriesService
   ){}
 
-  editedText: string = ''; // Отдельное поле для редактирования текста
-
-  @Input('category') category?: TaskСategory;
 
 
-
-  @ViewChild('inputText') inputText!: ElementRef;
-
-  isEdited: boolean = false;
-
-
-  ngOnInit(){
+  ngOnInit():void{
     this.editedText = this.category?this.category.title:"empty";
   }
+
   onDelete(): void {
-    if(this.category)
-    this.categoryService.delete(this.category.id)
+    if(this.category){
+      this.categoryService.delete(this.category.id)
+    }
+
   }
 
   onEdit(): void {
@@ -42,6 +45,7 @@ export class ItemComponent {
       this.inputText.nativeElement.focus();
     },0);
   }
+
   onEditEnd(): void {
     console.log(this.editedText)
     if(this.category)
