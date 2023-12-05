@@ -3,12 +3,21 @@ import { BehaviorSubject } from 'rxjs';
 import { Task } from '../interfaces/task';
 import { AuthService } from './auth.service';
 
+
+const STORAGE_TODO_ITEMS_KEY = 'todoItems-';
 @Injectable({
   providedIn: 'root',
 })
+
 export class TaskService {
+
+
+
+  private user = this.authService.getUser();
+
   private allItemsSubject = new BehaviorSubject<Task[]>([]);
   allItems$ = this.allItemsSubject.asObservable();
+
 
   constructor(private authService: AuthService) {
     this.load();
@@ -17,21 +26,23 @@ export class TaskService {
     });
   }
 
-  addItem(
+
+
+  addItem (
     text: string,
     priority: number,
     startDate: Date,
     endDate: Date,
-    taskСategoryId: string,
-  ) {
+    categoryId: string,
+  ):void  {
     const newItem: Task = {
       id: crypto.randomUUID(),
-      text: text,
+      text,
       done: false,
-      priority: priority,
-      startDate: startDate,
-      endDate: endDate,
-      taskСategoryId: taskСategoryId,
+      priority,
+      startDate,
+      endDate,
+      categoryId,
     };
     const updatedItems = [newItem, ...this.allItemsSubject.value];
     this.allItemsSubject.next(updatedItems);
@@ -54,10 +65,10 @@ export class TaskService {
         ? {
             ...item,
             text,
-            priority: priority,
-            startDate: startDate,
-            endDate: endDate,
-            taskСategoryId: taskСategoryId,
+            priority,
+            startDate,
+            endDate,
+            taskCategoryId: taskСategoryId,
           }
         : item,
     );
@@ -65,8 +76,7 @@ export class TaskService {
     this.save();
   }
 
-  editStatusItem(selectedTasks: Task[]) {
-    console.log(selectedTasks);
+  editStatusItem(selectedTasks: Task[]):void  {
     const idsSelected = selectedTasks.map((item) => item.id);
     const updatedItems = this.allItemsSubject.value.map((item) =>
       idsSelected.includes(item.id)
@@ -77,7 +87,7 @@ export class TaskService {
     this.save();
   }
 
-  deleteItem(id: string) {
+  deleteItem(id: string):void  {
     const updatedItems = this.allItemsSubject.value.filter(
       (item) => item.id !== id,
     );
@@ -85,17 +95,18 @@ export class TaskService {
     this.save();
   }
 
-  save() {
-    let user = this.authService.getUser();
+  private save():void  {
+
     localStorage.setItem(
-      'todoItems-' + user?.id,
+      STORAGE_TODO_ITEMS_KEY+ this.user?.id,
       JSON.stringify(this.allItemsSubject.value),
     );
   }
 
-  load() {
-    let user = this.authService.getUser();
-    const localStorageData = localStorage.getItem('todoItems-' + user?.id);
+  private load() :void {
+
+
+    const localStorageData = localStorage.getItem(STORAGE_TODO_ITEMS_KEY + this.user?.id);
     if (localStorageData) {
       try {
         const parsedData = JSON.parse(localStorageData) as Task[];
