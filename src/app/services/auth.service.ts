@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { User } from '../interfaces/user';
 
+const STORAGE_USERS_KEY = 'users';
 @Injectable({
   providedIn: 'root',
 })
@@ -10,21 +11,20 @@ export class AuthService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   private userSubject = new BehaviorSubject<User | null>(null);
 
-
   user$ = this.userSubject.asObservable();
 
   constructor(private router: Router) {}
 
   getUsers(): User[] {
-    const USERS_JSON = localStorage.getItem('users');
+    const USERS_JSON = localStorage.getItem(STORAGE_USERS_KEY);
     return JSON.parse(USERS_JSON ? USERS_JSON : '[]') as User[];
   }
 
-  getUser():User | null {
+  getUser(): User | null {
     return this.userSubject.value;
   }
 
-  register(name: string, login: string, password: string):void {
+  register(name: string, login: string, password: string): void {
     const user: User = {
       id: crypto.randomUUID() as string,
       name: name,
@@ -33,7 +33,7 @@ export class AuthService {
     };
 
     const newUsers = [...this.getUsers(), user];
-    localStorage.setItem('users', JSON.stringify(newUsers));
+    localStorage.setItem(STORAGE_USERS_KEY, JSON.stringify(newUsers));
 
     this.userSubject.next(user);
     this.isAuthenticatedSubject.next(true);
@@ -41,7 +41,7 @@ export class AuthService {
     this.router.navigate(['/']);
   }
 
-  login(login: string, password: string):void  {
+  login(login: string, password: string): void {
     const user = this.getUsers().find((user) => user.login === login);
 
     if (user && user.password === password) {
@@ -51,7 +51,7 @@ export class AuthService {
     }
   }
 
-  logout():void  {
+  logout(): void {
     this.isAuthenticatedSubject.next(false);
     this.userSubject.next(null);
     this.router.navigate(['/login']);
