@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { User } from '../interfaces/user';
 
+
 const STORAGE_USERS_KEY = 'users';
 @Injectable({
   providedIn: 'root',
@@ -37,7 +38,6 @@ export class AuthService {
 
     this.userSubject.next(user);
     this.isAuthenticatedSubject.next(true);
-
     this.router.navigate(['/']);
   }
 
