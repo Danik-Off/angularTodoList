@@ -5,9 +5,11 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class DialogEditTaskService {
-  constructor() {}
+
   private dialogStateSubject = new BehaviorSubject<string|null>(null);
   dialogState$ = this.dialogStateSubject.asObservable();
+
+  constructor() {}
 
   openDialogEditTask(id:string|null):void  {
     this.dialogStateSubject.next(id);
