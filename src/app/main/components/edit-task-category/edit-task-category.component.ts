@@ -56,13 +56,14 @@ export class EditTaskCategoryComponent implements OnInit , OnDestroy {
       });
   }
 
+  handlerAddBtn():void {
+    this.taskCategoriesService.add("default");
+     }
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
 
-  handlerAddBtn():void {
- this.taskCategoriesService.add("default");
-  }
+
 }
