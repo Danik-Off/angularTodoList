@@ -5,5 +5,5 @@ done:boolean;
 priority:number;
 startDate:Date;
 endDate:Date;
-taskСategoryId:string;
+categoryId:string;
 }
