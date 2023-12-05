@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormGroup,
@@ -14,8 +14,17 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../services/auth.service';
 import { RegisterForm } from '../interfaces/register-form';
-
-
+import { checkPasswords } from '../validators/password-match.validator';
+import {
+  LABEL_BUTTON_REGISTER,
+  TITLE_REGISTER,
+  LABEL_LOGIN_SUBTEXT,
+  LABEL_LINK__LOGIN,
+  LABEL_NAME,
+  LABEL_LOGIN,
+  LABEL_PASSWORD,
+  LABEL_CONFIRM_PASSWORD,
+} from '../shared/constants';
 
 @Component({
   selector: 'app-register',
@@ -31,36 +40,39 @@ import { RegisterForm } from '../interfaces/register-form';
   styleUrl: './register.component.scss',
 })
 export class RegisterComponent {
-  constructor(private authService: AuthService) {}
 
-  //проверка на совпадение паролей
-  checkPasswords: ValidatorFn = (
-    controlConfirmPassword : AbstractControl,
-  ): ValidationErrors | null => {
-    let group = controlConfirmPassword.parent;
-    let pass = group?.get('password')?.value;
-    let confirmPass = controlConfirmPassword?.value;
-    return pass === confirmPass ? null : { notSame: true };
-  };
+  titleLabel: string = TITLE_REGISTER;
+  loginLabelBtn: string = LABEL_BUTTON_REGISTER;
+  subtext: string = LABEL_LOGIN_SUBTEXT;
+  linkLabel: string = LABEL_LINK__LOGIN;
+  labelName: string = LABEL_NAME;
+  labelLogin: string = LABEL_LOGIN;
+  labelPassword: string = LABEL_PASSWORD;
+  labelRepeatPassword: string = LABEL_CONFIRM_PASSWORD;
 
-  registerForm = new FormGroup<RegisterForm>({
-    name: new FormControl(null, [
-      Validators.required,
-      Validators.minLength(2),
-      Validators.maxLength(10),
-    ]),
-    login: new FormControl(null, [
-      Validators.required,
-      Validators.minLength(5),
-    ]),
-    password: new FormControl(null, [Validators.required]),
-    repeatPassword: new FormControl(null, [
-      Validators.required,
-      this.checkPasswords,
-    ]),
-  });
 
-  handlerRegisterBtn():void  {
+  registerForm!: FormGroup;
+
+  constructor(private authService: AuthService) {
+    this.registerForm = new FormGroup<RegisterForm>({
+      name: new FormControl(null, [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(10),
+      ]),
+      login: new FormControl(null, [
+        Validators.required,
+        Validators.minLength(5),
+      ]),
+      password: new FormControl(null, [Validators.required]),
+      repeatPassword: new FormControl(null, [
+        Validators.required,
+        checkPasswords,
+      ]),
+    });
+  }
+
+  handlerRegisterBtn(): void {
     if (this.registerForm.valid) {
       let name = this.registerForm.get('name')?.value;
       let login = this.registerForm.get('login')?.value;
