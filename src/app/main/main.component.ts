@@ -6,7 +6,7 @@ import { EditTaskCategoryComponent } from './components/edit-task-category/edit-
 import { MenubarModule } from 'primeng/menubar';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../services/auth.service';
-import { map } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { Observable, Subject } from 'rxjs';
 import { TaskService } from '../services/task.service';
 import { TaskCategoriesService } from '../services/task-categories.service';
@@ -41,7 +41,7 @@ export class MainComponent implements OnInit,OnDestroy {
   }
 
   ngOnInit(): void {
-    this.authService.user$.subscribe((user)=>{
+    this.authService.user$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((user)=>{
       if(user){
         this.userName$ =  user.name ;
         this.taskService.load(user);
