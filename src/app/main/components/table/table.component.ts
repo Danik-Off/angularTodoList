@@ -66,7 +66,7 @@ export class TableComponent implements OnInit, OnDestroy {
         this.tasks = val;
 
         this.selectedTasks = val.filter((task) => {
-          console.log(task.done);
+
           return task.done;
         });
       });
