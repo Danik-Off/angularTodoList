@@ -11,14 +11,14 @@ import { DialogEditTaskCategoryService } from 'src/app/services/dialog-edit-task
 import { TaskService } from 'src/app/services/task.service';
 import { TaskCategoriesService } from 'src/app/services/task-categories.service';
 import { TaskCategory } from 'src/app/interfaces/taskCategory';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import {
   BUTTON_LABEL_ADD,
   BUTTON_LABEL_EDIT_TASK_CATEGORIES,
   TH_LABEL_TEXT,
   TH_LABEL_PRIORITY,
   TH_LABEL_CATEGORY,
-  TH_LABEL_DEADLINE
+  TH_LABEL_DEADLINE,
 } from 'src/app/shared/constants';
 
 @Component({
@@ -36,7 +36,6 @@ import {
   providers: [ConfirmationService],
 })
 export class TableComponent implements OnInit, OnDestroy {
-
   addLabelBtn: string = BUTTON_LABEL_ADD;
   editTaskCategoriesLabelBtn: string = BUTTON_LABEL_EDIT_TASK_CATEGORIES;
   textLabelTh: string = TH_LABEL_TEXT;
@@ -61,18 +60,22 @@ export class TableComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.taskService.allItems$.subscribe((val) => {
-      this.tasks = val;
+    this.taskService.allItems$
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((val) => {
+        this.tasks = val;
 
-      this.selectedTasks = val.filter((task) => {
-        console.log(task.done);
-        return task.done;
+        this.selectedTasks = val.filter((task) => {
+          console.log(task.done);
+          return task.done;
+        });
       });
-    });
 
-    this.categoryService.categories$.subscribe((val) => {
-      this.categories = val;
-    });
+    this.categoryService.categories$
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((val) => {
+        this.categories = val;
+      });
   }
   getCategories(task: Task): string {
     const ID = task.categoryId;
@@ -84,7 +87,6 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   handlerOpenEditorTaskForNew(): void {
-
     this.dialogService.openDialogEditTask(null);
   }
 
