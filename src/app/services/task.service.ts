@@ -21,9 +21,6 @@ export class TaskService {
 
   constructor(private authService: AuthService) {
     this.load();
-    authService.user$.subscribe(() => {
-      this.load();
-    });
   }
 
 
