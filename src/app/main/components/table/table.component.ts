@@ -1,21 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
-
 import { ButtonModule } from 'primeng/button';
 import { ToolbarModule } from 'primeng/toolbar';
 import { Task } from 'src/app/interfaces/task';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import {
-  ConfirmationService,
-  MessageService,
-  ConfirmEventType,
-} from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
 import { DialogEditTaskService } from 'src/app/services/dialog-edit-task.service';
 import { DialogEditTaskCategoryService } from 'src/app/services/dialog-edit-task-category.service';
 import { TaskService } from 'src/app/services/task.service';
 import { TaskCategoriesService } from 'src/app/services/task-categories.service';
-import { TaskСategory } from 'src/app/interfaces/taskCategory';
+import { TaskCategory } from 'src/app/interfaces/taskCategory';
+import { Subject } from 'rxjs';
+import {
+  BUTTON_LABEL_ADD,
+  BUTTON_LABEL_EDIT_TASK_CATEGORIES,
+  TH_LABEL_TEXT,
+  TH_LABEL_PRIORITY,
+  TH_LABEL_CATEGORY,
+  TH_LABEL_DEADLINE
+} from 'src/app/shared/constants';
 
 @Component({
   selector: 'app-table',
@@ -31,11 +35,22 @@ import { TaskСategory } from 'src/app/interfaces/taskCategory';
   styleUrl: './table.component.scss',
   providers: [ConfirmationService],
 })
-export class TableComponent implements OnInit {
+export class TableComponent implements OnInit, OnDestroy {
+
+  addLabelBtn: string = BUTTON_LABEL_ADD;
+  editTaskCategoriesLabelBtn: string = BUTTON_LABEL_EDIT_TASK_CATEGORIES;
+  textLabelTh: string = TH_LABEL_TEXT;
+  priorityLabelTh: string = TH_LABEL_PRIORITY;
+  categoryLabelTh: string = TH_LABEL_CATEGORY;
+  deadlineLabelTh: string = TH_LABEL_DEADLINE;
+
   tasks!: Task[];
+
   selectedTasks!: Task[];
 
-  categories!:TaskСategory[];
+  private ngUnsubscribe = new Subject<void>();
+
+  private categories!: TaskCategory[];
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -45,44 +60,43 @@ export class TableComponent implements OnInit {
     private categoryService: TaskCategoriesService,
   ) {}
 
-  ngOnInit():void  {
+  ngOnInit(): void {
     this.taskService.allItems$.subscribe((val) => {
       this.tasks = val;
 
       this.selectedTasks = val.filter((task) => {
-        console.log(task.done)
+        console.log(task.done);
         return task.done;
       });
-
     });
 
     this.categoryService.categories$.subscribe((val) => {
-     this.categories = val;
+      this.categories = val;
     });
-
   }
-  getCategories(task:Task):string{
-    const ID = task.taskСategoryId;
-    return this.categories.filter((item)=> item.id === ID)[0]?.title;
+  getCategories(task: Task): string {
+    const ID = task.categoryId;
+    return this.categories.filter((item) => item.id === ID)[0]?.title;
   }
 
-  handlerOpenEditorTask(id: string):void  {
+  handlerOpenEditorTask(id: string): void {
     this.dialogService.openDialogEditTask(id);
   }
 
-  handlerOpenEditorTaskForNew():void  {
+  handlerOpenEditorTaskForNew(): void {
+
     this.dialogService.openDialogEditTask(null);
   }
 
-  handlerOpenEditorTaskCatetories():void  {
+  handlerOpenEditorTaskCategories(): void {
     this.dialogCategoriesService.openDialogEditTask();
   }
 
-  handlerSelectedChange():void  {
+  handlerSelectedChange(): void {
     this.taskService.editStatusItem(this.selectedTasks);
   }
 
-  confirmDelete(id: string):void  {
+  confirmDelete(id: string): void {
     this.confirmationService.confirm({
       message: 'Do you want to delete this record?',
       header: 'Delete Confirmation',
@@ -92,5 +106,10 @@ export class TableComponent implements OnInit {
       },
       reject: () => {},
     });
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }
