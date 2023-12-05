@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Task } from '../interfaces/task';
-import { AuthService } from './auth.service';
+import { User } from '../interfaces/user';
 
 
 const STORAGE_TODO_ITEMS_KEY = 'todoItems-';
@@ -13,14 +13,13 @@ export class TaskService {
 
 
 
-  private user = this.authService.getUser();
+  private user!:User;
 
   private allItemsSubject = new BehaviorSubject<Task[]>([]);
   allItems$ = this.allItemsSubject.asObservable();
 
 
-  constructor(private authService: AuthService) {
-    this.load();
+  constructor() {
   }
 
 
@@ -92,16 +91,11 @@ export class TaskService {
     this.save();
   }
 
-  private save():void  {
 
-    localStorage.setItem(
-      STORAGE_TODO_ITEMS_KEY+ this.user?.id,
-      JSON.stringify(this.allItemsSubject.value),
-    );
-  }
 
-  private load() :void {
-
+   load(user:User) :void {
+    console.log(user);
+    this.user = user;
 
     const localStorageData = localStorage.getItem(STORAGE_TODO_ITEMS_KEY + this.user?.id);
     if (localStorageData) {
@@ -112,5 +106,12 @@ export class TaskService {
         console.error('Ошибка:', error);
       }
     }
+  }
+  private save():void  {
+
+    localStorage.setItem(
+      STORAGE_TODO_ITEMS_KEY+ this.user?.id,
+      JSON.stringify(this.allItemsSubject.value),
+    );
   }
 }
