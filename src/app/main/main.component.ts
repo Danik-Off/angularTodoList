@@ -24,6 +24,8 @@ import { Observable } from 'rxjs';
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss',
 })
+
+
 export class MainComponent {
 
   userName$: Observable<string> = this.authService.user$.pipe(
