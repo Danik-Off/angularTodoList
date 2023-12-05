@@ -1,39 +1,41 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { TaskСategory } from '../interfaces/taskCategory';
+import {  TaskCategory } from '../interfaces/taskCategory';
 import { AuthService } from './auth.service';
 
+const STORAGE_CATEGORIES_KEY = 'todoCategories-';
 @Injectable({
   providedIn: 'root',
 })
+
 export class TaskCategoriesService {
   constructor(private authService: AuthService) {
     this.load();
   }
 
-  categoties = new BehaviorSubject<TaskСategory[]>([
+  categories = new BehaviorSubject<TaskCategory[]>([
     { id: 'testIdID', title: 'test' },
   ]);
 
-  categories$ = this.categoties.asObservable();
+  categories$ = this.categories.asObservable();
 
-  add(title: string) {
-    const category: TaskСategory = {
+  add(title: string):void  {
+    const category: TaskCategory = {
       id: crypto.randomUUID(),
       title: title,
     };
 
-    const updatedItems = [category, ...this.categoties.value];
-    this.categoties.next(updatedItems);
+    const updatedItems = [category, ...this.categories.value];
+    this.categories.next(updatedItems);
     this.save();
   }
-  get(id: string): TaskСategory {
-    console.log(this.categoties.value.filter((item) => item.id === id)[0]);
-    return this.categoties.value.filter((item) => item.id === id)[0];
+  get(id: string): TaskCategory {
+    console.log(this.categories.value.filter((item) => item.id === id)[0]);
+    return this.categories.value.filter((item) => item.id === id)[0];
   }
 
-  edit(id: string, title: string) {
-    const updatedItems = this.categoties.value.map((item) =>
+  edit(id: string, title: string) :void {
+    const updatedItems = this.categories.value.map((item) =>
       item.id === id
         ? {
             ...item,
@@ -41,33 +43,33 @@ export class TaskCategoriesService {
           }
         : item,
     );
-    this.categoties.next(updatedItems);
+    this.categories.next(updatedItems);
     this.save();
   }
 
-  delete(id: string) {
-    const updatedItems = this.categoties.value.filter((item) => item.id !== id);
-    this.categoties.next(updatedItems);
+  delete(id: string):void  {
+    const updatedItems = this.categories.value.filter((item) => item.id !== id);
+    this.categories.next(updatedItems);
     this.save();
   }
 
-  save() {
+  save():void  {
     let user = this.authService.getUser();
     localStorage.setItem(
-      'todoCategories-' + user?.id,
-      JSON.stringify(this.categoties.value),
+      STORAGE_CATEGORIES_KEY  + user?.id,
+      JSON.stringify(this.categories.value),
     );
   }
 
-  load() {
+  load():void  {
     let user = this.authService.getUser();
-    const localStorageData = localStorage.getItem('todoCategories-' + user?.id);
+    const localStorageData = localStorage.getItem(STORAGE_CATEGORIES_KEY  + user?.id);
     if (localStorageData) {
       try {
-        const parsedData = JSON.parse(localStorageData) as TaskСategory[];
+        const parsedData = JSON.parse(localStorageData) as TaskCategory[];
 
         [];
-        this.categoties.next(parsedData);
+        this.categories.next(parsedData);
       } catch (error) {
         console.error('Ошибка:', error);
       }
