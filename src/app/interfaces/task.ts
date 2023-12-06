@@ -1,5 +1,5 @@
 export interface Task {
-id:string;
+readonly id:string;
 text:string;
 done:boolean;
 priority:number;

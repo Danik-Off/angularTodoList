@@ -1,4 +1,4 @@
 export interface TaskCategory{
-  id:string;
+  readonly id:string;
   title:string;
 }

@@ -7,4 +7,5 @@ export interface EditTaskForm {
   startDate: FormControl;
   endDate: FormControl;
   taskСategory: FormControl;
+
 }
