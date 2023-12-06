@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TITLE_PAGE } from './shared/constants';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'angularTodo';
+  title = TITLE_PAGE;
 }
