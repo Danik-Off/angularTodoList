@@ -13,9 +13,16 @@ import { CalendarModule } from 'primeng/calendar';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TaskCategoriesService } from 'src/app/services/task-categories.service';
 import { Subject, takeUntil } from 'rxjs';
-import { BUTTON_LABEL_CANCEL, BUTTON_LABEL_SAVE, LABEL_END_DATE, LABEL_ID, LABEL_PRIORITY, LABEL_START_DATE, LABEL_TEXT, TITLE_EDIT_TASK } from 'src/app/shared/constants';
-
-
+import {
+  BUTTON_LABEL_CANCEL,
+  BUTTON_LABEL_SAVE,
+  LABEL_END_DATE,
+  LABEL_ID,
+  LABEL_PRIORITY,
+  LABEL_START_DATE,
+  LABEL_TEXT,
+  TITLE_EDIT_TASK,
+} from 'src/app/shared/constants';
 
 @Component({
   selector: 'app-edit-task',
@@ -44,16 +51,16 @@ export class EditTaskComponent implements OnInit, OnDestroy {
     taskСategory: new FormControl(),
   });
 
-  titleDialog:string = TITLE_EDIT_TASK;
+  titleDialog: string = TITLE_EDIT_TASK;
 
-  buttonLabelSave:string = BUTTON_LABEL_SAVE;
-  buttonLabelCancel:string = BUTTON_LABEL_CANCEL;
+  buttonLabelSave: string = BUTTON_LABEL_SAVE;
+  buttonLabelCancel: string = BUTTON_LABEL_CANCEL;
 
-  idLabel:string = LABEL_ID;
-  textLabel:string = LABEL_TEXT;
-  priorityLabel:string = LABEL_PRIORITY;
-  startDateLabel:string = LABEL_START_DATE;
-  endDateLabel:string = LABEL_END_DATE;
+  idLabel: string = LABEL_ID;
+  textLabel: string = LABEL_TEXT;
+  priorityLabel: string = LABEL_PRIORITY;
+  startDateLabel: string = LABEL_START_DATE;
+  endDateLabel: string = LABEL_END_DATE;
 
   visible: boolean = true;
 
@@ -73,13 +80,11 @@ export class EditTaskComponent implements OnInit, OnDestroy {
     this.dialogService.dialogState$
       .pipe(takeUntil(this.unsubscribe))
       .subscribe((value) => {
-
-
         if (value) {
           this.id = value;
-          const TASK = this.taskService.getItem(value);
+          const TASK = this.taskService.getTask(value);
           const CATEGORY =
-            this.categoriesService.get(TASK.categoryId) ?? 'default';
+            this.categoriesService.getCategory(TASK.categoryId) ?? 'default';
 
           this.editTaskForm.setValue({
             done: TASK.done,
@@ -92,7 +97,7 @@ export class EditTaskComponent implements OnInit, OnDestroy {
         } else {
           this.id = null;
         }
-        console.log(this.visible)
+
         this.visible = !this.visible;
       });
 
@@ -125,7 +130,7 @@ export class EditTaskComponent implements OnInit, OnDestroy {
     const TASK_CATEGORY_ID = TASK_CATEGORY ? TASK_CATEGORY.id : null;
 
     if (TEXT && PRIORITY && START_DATE && END_DATE) {
-      this.taskService.addItem(
+      this.taskService.addTask(
         TEXT,
         PRIORITY,
         new Date(START_DATE),
@@ -144,7 +149,7 @@ export class EditTaskComponent implements OnInit, OnDestroy {
     const TASK_CATEGORY_ID = TASK_CATEGORY ? TASK_CATEGORY.id : null;
 
     if (this.id && TEXT && PRIORITY && START_DATE && END_DATE)
-      this.taskService.editItem(
+      this.taskService.editTask(
         this.id,
         TEXT,
         PRIORITY,

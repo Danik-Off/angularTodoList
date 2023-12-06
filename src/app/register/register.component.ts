@@ -23,7 +23,6 @@ import {
   LABEL_CONFIRM_PASSWORD,
 } from '../shared/constants';
 
-
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -38,7 +37,6 @@ import {
   styleUrl: './register.component.scss',
 })
 export class RegisterComponent {
-
   titleLabel: string = TITLE_REGISTER;
   loginLabelBtn: string = LABEL_BUTTON_REGISTER;
   subtext: string = LABEL_LOGIN_SUBTEXT;
@@ -47,7 +45,6 @@ export class RegisterComponent {
   labelLogin: string = LABEL_LOGIN;
   labelPassword: string = LABEL_PASSWORD;
   labelRepeatPassword: string = LABEL_CONFIRM_PASSWORD;
-
 
   registerForm!: FormGroup;
 
@@ -72,14 +69,13 @@ export class RegisterComponent {
 
   handlerRegisterBtn(): void {
     if (this.registerForm.valid) {
-      let name = this.registerForm.get('name')?.value;
-      let login = this.registerForm.get('login')?.value;
-      let password = this.registerForm.get('password')?.value;
+      const NAME = this.registerForm.get('name')?.value;
+      const LOGIN = this.registerForm.get('login')?.value;
+      const PASSWORD = this.registerForm.get('password')?.value;
 
-      if (name && login && password){
-        this.authService.register(name, login, password);
+      if (NAME && LOGIN && PASSWORD) {
+        this.authService.register(NAME, LOGIN, PASSWORD);
       }
-
     }
   }
 }

@@ -10,7 +10,10 @@ import { DialogEditTaskCategoryService } from 'src/app/services/dialog-edit-task
 import { TaskCategoriesService } from 'src/app/services/task-categories.service';
 import { ItemComponent } from './item/item.component';
 import { Subject, takeUntil } from 'rxjs';
-import { BUTTON_LABEL_ADD, TITLE_EDIT_TASK_CATEGORY} from 'src/app/shared/constants';
+import {
+  BUTTON_LABEL_ADD,
+  TITLE_EDIT_TASK_CATEGORY,
+} from 'src/app/shared/constants';
 @Component({
   selector: 'app-edit-task-category',
   standalone: true,
@@ -20,16 +23,14 @@ import { BUTTON_LABEL_ADD, TITLE_EDIT_TASK_CATEGORY} from 'src/app/shared/consta
     DropdownModule,
     DialogModule,
     InputTextModule,
-    ItemComponent
+    ItemComponent,
   ],
   templateUrl: './edit-task-category.component.html',
   styleUrl: './edit-task-category.component.scss',
 })
-
-export class EditTaskCategoryComponent implements OnInit , OnDestroy {
-
-  addLabelBtn:string = BUTTON_LABEL_ADD;
-  titleDialog:string = TITLE_EDIT_TASK_CATEGORY;
+export class EditTaskCategoryComponent implements OnInit, OnDestroy {
+  addLabelBtn: string = BUTTON_LABEL_ADD;
+  titleDialog: string = TITLE_EDIT_TASK_CATEGORY;
 
   visible: boolean = true;
 
@@ -56,14 +57,12 @@ export class EditTaskCategoryComponent implements OnInit , OnDestroy {
       });
   }
 
-  handlerAddBtn():void {
-    this.taskCategoriesService.add("default");
-     }
+  handlerAddBtn(): void {
+    this.taskCategoriesService.addCategory('default');
+  }
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
-
-
 }

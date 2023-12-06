@@ -6,11 +6,10 @@ import { EditTaskCategoryComponent } from './components/edit-task-category/edit-
 import { MenubarModule } from 'primeng/menubar';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../services/auth.service';
-import { map, takeUntil } from 'rxjs/operators';
-import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import { TaskService } from '../services/task.service';
 import { TaskCategoriesService } from '../services/task-categories.service';
-
 
 @Component({
   selector: 'app-main',
@@ -26,31 +25,29 @@ import { TaskCategoriesService } from '../services/task-categories.service';
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss',
 })
-
-
-export class MainComponent implements OnInit,OnDestroy {
-  userName$!:string;
+export class MainComponent implements OnInit, OnDestroy {
+  userName$!: string;
   ngUnsubscribe: Subject<void> = new Subject<void>();
 
   constructor(
     private authService: AuthService,
-    private taskService:TaskService,
-    private taskCategoryService:TaskCategoriesService
-  ) {
-
-  }
+    private taskService: TaskService,
+    private taskCategoryService: TaskCategoriesService,
+  ) {}
 
   ngOnInit(): void {
-    this.authService.user$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((user)=>{
-      if(user){
-        this.userName$ =  user.name ;
-        this.taskService.load(user);
-        this.taskCategoryService.load(user);
-      }
-    });
+    this.authService.user$
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((user) => {
+        if (user) {
+          this.userName$ = user.name;
+          this.taskService.loadTasks(user);
+          this.taskCategoryService.loadCategory(user);
+        }
+      });
   }
 
-  handlerSingOutBtn():void  {
+  handlerSingOutBtn(): void {
     this.authService.logout();
   }
 
@@ -58,5 +55,4 @@ export class MainComponent implements OnInit,OnDestroy {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
-
 }

@@ -7,10 +7,6 @@ import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../services/auth.service';
 import { LABEL_BUTTON_LOGIN, LABEL_LINK_REGISTER, LABEL_REGISTER_SUBTEXT, TITLE_LOGIN } from '../shared/constants';
 
-
-
-
-
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -33,10 +29,10 @@ export class LoginComponent {
   constructor(private authService:AuthService){}
 
   handlerLoginBtn():void {
-    let login = this.loginForm.get("login")?.value
-    let password = this.loginForm.get("password")?.value
-    if(login && password)
-      this.authService.login(login,password);
+    const LOGIN = this.loginForm.get("login")?.value
+    const PASSWORD = this.loginForm.get("password")?.value
+    if(LOGIN && PASSWORD)
+      this.authService.login(LOGIN,PASSWORD);
   }
 
 }

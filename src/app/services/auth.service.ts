@@ -1,20 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '../interfaces/user';
-
 
 const STORAGE_USERS_KEY = 'users';
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  user$!: Observable<User | null>;
+
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   private userSubject = new BehaviorSubject<User | null>(null);
 
-  user$ = this.userSubject.asObservable();
-
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    this.user$ = this.userSubject.asObservable();
+  }
 
   getUsers(): User[] {
     const USERS_JSON = localStorage.getItem(STORAGE_USERS_KEY);

@@ -1,21 +1,22 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DialogEditTaskCategoryService {
-
+  dialogState$!: Observable<boolean>;
   private dialogStateSubject = new BehaviorSubject<boolean>(false);
-  dialogState$ = this.dialogStateSubject.asObservable();
 
-  constructor() { }
+  constructor() {
+    this.dialogState$ = this.dialogStateSubject.asObservable();
+  }
 
-  openDialogEditTask():void  {
+  openDialogEditTask(): void {
     this.dialogStateSubject.next(true);
   }
 
-  closeDialogEditTask():void  {
+  closeDialogEditTask(): void {
     this.dialogStateSubject.next(false);
   }
 }

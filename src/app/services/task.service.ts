@@ -1,36 +1,29 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Task } from '../interfaces/task';
 import { User } from '../interfaces/user';
-
 
 const STORAGE_TODO_ITEMS_KEY = 'todoItems-';
 @Injectable({
   providedIn: 'root',
 })
-
 export class TaskService {
-
-
-
-  private user!:User;
+  allItems$!: Observable<Task[]>;
+  private user!: User;
 
   private allItemsSubject = new BehaviorSubject<Task[]>([]);
-  allItems$ = this.allItemsSubject.asObservable();
-
 
   constructor() {
+    this.allItems$ = this.allItemsSubject.asObservable();
   }
 
-
-
-  addItem (
+  addTask(
     text: string,
     priority: number,
     startDate: Date,
     endDate: Date,
     categoryId: string,
-  ):void  {
+  ): void {
     const newItem: Task = {
       id: crypto.randomUUID(),
       text,
@@ -44,11 +37,11 @@ export class TaskService {
     this.allItemsSubject.next(updatedItems);
     this.save();
   }
-  getItem(id: string): Task {
+  getTask(id: string): Task {
     return this.allItemsSubject.value.filter((item) => item.id === id)[0];
   }
 
-  editItem(
+  editTask(
     id: string,
     text: string,
     priority: number,
@@ -72,7 +65,7 @@ export class TaskService {
     this.save();
   }
 
-  editStatusItem(selectedTasks: Task[]):void  {
+  editStatusTask(selectedTasks: Task[]): void {
     const idsSelected = selectedTasks.map((item) => item.id);
     const updatedItems = this.allItemsSubject.value.map((item) =>
       idsSelected.includes(item.id)
@@ -83,7 +76,7 @@ export class TaskService {
     this.save();
   }
 
-  deleteItem(id: string):void  {
+  deleteTask(id: string): void {
     const updatedItems = this.allItemsSubject.value.filter(
       (item) => item.id !== id,
     );
@@ -91,13 +84,13 @@ export class TaskService {
     this.save();
   }
 
-
-
-   load(user:User) :void {
+  loadTasks(user: User): void {
     console.log(user);
     this.user = user;
 
-    const localStorageData = localStorage.getItem(STORAGE_TODO_ITEMS_KEY + this.user?.id);
+    const localStorageData = localStorage.getItem(
+      STORAGE_TODO_ITEMS_KEY + this.user?.id,
+    );
     if (localStorageData) {
       try {
         const parsedData = JSON.parse(localStorageData) as Task[];
@@ -107,10 +100,9 @@ export class TaskService {
       }
     }
   }
-  private save():void  {
-
+  private save(): void {
     localStorage.setItem(
-      STORAGE_TODO_ITEMS_KEY+ this.user?.id,
+      STORAGE_TODO_ITEMS_KEY + this.user?.id,
       JSON.stringify(this.allItemsSubject.value),
     );
   }

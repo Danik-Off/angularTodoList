@@ -66,7 +66,6 @@ export class TableComponent implements OnInit, OnDestroy {
         this.tasks = val;
 
         this.selectedTasks = val.filter((task) => {
-
           return task.done;
         });
       });
@@ -95,7 +94,7 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   handlerSelectedChange(): void {
-    this.taskService.editStatusItem(this.selectedTasks);
+    this.taskService.editStatusTask(this.selectedTasks);
   }
 
   confirmDelete(id: string): void {
@@ -104,7 +103,7 @@ export class TableComponent implements OnInit, OnDestroy {
       header: 'Delete Confirmation',
       icon: 'pi pi-info-circle',
       accept: () => {
-        this.taskService.deleteItem(id);
+        this.taskService.deleteTask(id);
       },
       reject: () => {},
     });

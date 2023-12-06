@@ -1,26 +1,24 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import {  TaskCategory } from '../interfaces/taskCategory';
+import { TaskCategory } from '../interfaces/taskCategory';
 import { User } from '../interfaces/user';
 
 const STORAGE_CATEGORIES_KEY = 'todoCategories-';
 @Injectable({
   providedIn: 'root',
 })
-
 export class TaskCategoriesService {
-
   categories = new BehaviorSubject<TaskCategory[]>([
     { id: 'testIdID', title: 'test' },
   ]);
 
   categories$ = this.categories.asObservable();
-  private user!:User;
 
-  constructor() {
-  }
+  private user!: User;
 
-  add(title: string):void  {
+  constructor() {}
+
+  addCategory(title: string): void {
     const category: TaskCategory = {
       id: crypto.randomUUID(),
       title: title,
@@ -30,11 +28,12 @@ export class TaskCategoriesService {
     this.categories.next(updatedItems);
     this.save();
   }
-  get(id: string): TaskCategory {
+
+  getCategory(id: string): TaskCategory {
     return this.categories.value.filter((item) => item.id === id)[0];
   }
 
-  edit(id: string, title: string) :void {
+  editCategory(id: string, title: string): void {
     const updatedItems = this.categories.value.map((item) =>
       item.id === id
         ? {
@@ -47,18 +46,17 @@ export class TaskCategoriesService {
     this.save();
   }
 
-  delete(id: string):void  {
+  deleteCategory(id: string): void {
     const updatedItems = this.categories.value.filter((item) => item.id !== id);
     this.categories.next(updatedItems);
     this.save();
   }
 
-
-
-  load(user:User) :void {
-
+  loadCategory(user: User): void {
     this.user = user;
-    const localStorageData = localStorage.getItem(STORAGE_CATEGORIES_KEY  + user?.id);
+    const localStorageData = localStorage.getItem(
+      STORAGE_CATEGORIES_KEY + user?.id,
+    );
     if (localStorageData) {
       try {
         const parsedData = JSON.parse(localStorageData) as TaskCategory[];
@@ -70,10 +68,10 @@ export class TaskCategoriesService {
       }
     }
   }
-  private  save():void  {
 
+  private save(): void {
     localStorage.setItem(
-      STORAGE_CATEGORIES_KEY  + this.user?.id,
+      STORAGE_CATEGORIES_KEY + this.user?.id,
       JSON.stringify(this.categories.value),
     );
   }
