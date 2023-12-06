@@ -5,9 +5,6 @@ import {
   FormControl,
   ReactiveFormsModule,
   Validators,
-  ValidatorFn,
-  AbstractControl,
-  ValidationErrors,
 } from '@angular/forms';
 import { PasswordModule } from 'primeng/password';
 import { InputTextModule } from 'primeng/inputtext';
@@ -79,8 +76,10 @@ export class RegisterComponent {
       let login = this.registerForm.get('login')?.value;
       let password = this.registerForm.get('password')?.value;
 
-      if (name && login && password)
+      if (name && login && password){
         this.authService.register(name, login, password);
+      }
+
     }
   }
 }
