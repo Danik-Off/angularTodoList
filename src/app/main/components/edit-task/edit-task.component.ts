@@ -8,7 +8,6 @@ import { TaskCategory } from 'src/app/interfaces/taskCategory';
 import { DialogEditTaskService } from 'src/app/services/dialog-edit-task.service';
 
 import { TaskService } from 'src/app/services/task.service';
-import { Task } from 'src/app/interfaces/task';
 import { CalendarModule } from 'primeng/calendar';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TaskCategoriesService } from 'src/app/services/task-categories.service';
