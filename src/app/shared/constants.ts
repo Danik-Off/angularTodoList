@@ -1,6 +1,7 @@
 //titles
 export const TITLE_PAGE = 'TODO';
 export const TITLE_EDIT_TASK_CATEGORY = 'Редактировать категорию задачи';
+export const TITLE_NEW_TASK = 'Создать задачу';
 export const TITLE_EDIT_TASK = 'Редактировать задачу';
 export const TITLE_LOGIN = "Войти";
 export const TITLE_REGISTER = "Зарегистрироваться";
@@ -22,8 +23,8 @@ export const TH_LABEL_DEADLINE = 'Сроки';
 export const LABEL_ID = 'Идентификатор';
 export const LABEL_TEXT = 'Текст';
 export const LABEL_PRIORITY = 'Приоритет';
-export const LABEL_START_DATE = 'Начало';
-export const LABEL_END_DATE = 'Конец';
+export const LABEL_START_DATE = 'Начало:';
+export const LABEL_END_DATE = 'Конец:';
 export const LABEL_CATEGORY = 'Категория';
 
 //Login & register

@@ -5,8 +5,22 @@
   gap:1rem;
   .btns{
     width: 100%;
+    gap:1rex;
     display: flex;
     justify-content: flex-end;
+  }
+  .dates{
+    display: flex;
+    flex-direction: column;
+    gap:1rem;
+    div{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      align-items: center;
+
+    }
   }
 }
 

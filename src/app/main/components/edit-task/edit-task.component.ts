@@ -21,6 +21,7 @@ import {
   LABEL_START_DATE,
   LABEL_TEXT,
   TITLE_EDIT_TASK,
+  TITLE_NEW_TASK,
 } from 'src/app/shared/constants';
 
 @Component({
@@ -50,7 +51,7 @@ export class EditTaskComponent implements OnInit, OnDestroy {
     taskСategory: new FormControl(),
   });
 
-  titleDialog: string = TITLE_EDIT_TASK;
+  titleDialog: string = TITLE_NEW_TASK;
 
   buttonLabelSave: string = BUTTON_LABEL_SAVE;
   buttonLabelCancel: string = BUTTON_LABEL_CANCEL;
@@ -66,6 +67,8 @@ export class EditTaskComponent implements OnInit, OnDestroy {
   selectedCategory!: TaskCategory[];
 
   taskCategories: TaskCategory[] = [];
+
+  priorities:number[] =  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   private unsubscribe = new Subject<void>();
 
@@ -97,7 +100,7 @@ export class EditTaskComponent implements OnInit, OnDestroy {
           this.id = null;
         }
 
-        this.visible = !this.visible;
+         this.visible = !this.visible;
       });
 
     this.categoriesService.categories$
@@ -121,6 +124,7 @@ export class EditTaskComponent implements OnInit, OnDestroy {
   }
 
   createNew(): void {
+    this.titleDialog = TITLE_NEW_TASK;
     const TEXT = this.editTaskForm.get('text')?.value;
     const PRIORITY = this.editTaskForm.get('priority')?.value;
     const START_DATE = this.editTaskForm.get('startDate')?.value;
@@ -140,6 +144,8 @@ export class EditTaskComponent implements OnInit, OnDestroy {
   }
 
   editTask(): void {
+    this.titleDialog = TITLE_EDIT_TASK;
+
     const TEXT = this.editTaskForm.get('text')?.value;
     const PRIORITY = this.editTaskForm.get('priority')?.value;
     const START_DATE = this.editTaskForm.get('startDate')?.value;

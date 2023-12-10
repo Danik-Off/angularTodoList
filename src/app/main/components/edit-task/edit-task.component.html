@@ -6,18 +6,41 @@
   [draggable]="false"
   [resizable]="false"
 >
-  <form  [formGroup]="editTaskForm" class="app-edit-task-form">
-    <span>{{idLabel}}{{ id ?id : "#" }}</span>
-    <label>{{textLabel}}</label>
+  <form [formGroup]="editTaskForm" class="app-edit-task-form">
+    <span>{{ idLabel }}{{ id ? id : "#" }}</span>
+    <label>{{ textLabel }}</label>
     <input type="text" pInputText formControlName="text" />
-    <label>{{priorityLabel}}</label>
-    <input type="text" pInputText  formControlName="priority"/>
-    <div>
-      <label>{{startDateLabel}}</label>
-      <p-calendar [showTime]="true"  appendTo="body"  [style]="{zIndex:'100'}" [showSeconds]="true"  formControlName="startDate"></p-calendar>
-      <label>{{endDateLabel}}</label>
-      <p-calendar [showTime]="true" appendTo="body" [showSeconds]="true" formControlName="endDate"></p-calendar>
+    <label>{{ priorityLabel }}</label>
+    <p-dropdown
+      [options]="priorities"
+      [style]="{ width: '100%' }"
+      [showClear]="true"
+      placeholder="выберите приоритет"
+      formControlName="priority"
+    ></p-dropdown>
+    <div class="dates">
+      <div>
+        <label>{{ startDateLabel }}</label>
+        <p-calendar
+          [showTime]="true"
+          appendTo="body"
+          [style]="{ zIndex: '100' }"
+          [showSeconds]="true"
+          formControlName="startDate"
+        ></p-calendar>
+      </div>
+
+      <div>
+        <label>{{ endDateLabel }}</label>
+        <p-calendar
+          [showTime]="true"
+          appendTo="body"
+          [showSeconds]="true"
+          formControlName="endDate"
+        ></p-calendar>
+      </div>
     </div>
+
     <p-dropdown
       [options]="taskCategories"
       [style]="{ width: '100%' }"
@@ -26,9 +49,18 @@
       placeholder="выберите категорию"
       formControlName="taskСategory"
     ></p-dropdown>
+
     <div class="btns">
-      <p-button (onClick)="handlerCancelBtn()" [label]="buttonLabelCancel" severity="danger"></p-button
-      ><p-button (onClick)="handlerSaveBtn()" [label]="buttonLabelSave" severity="success"></p-button>
+      <p-button
+        (onClick)="handlerCancelBtn()"
+        [label]="buttonLabelCancel"
+        severity="danger"
+      ></p-button
+      ><p-button
+        (onClick)="handlerSaveBtn()"
+        [label]="buttonLabelSave"
+        severity="success"
+      ></p-button>
     </div>
   </form>
 </p-dialog>
