@@ -34,11 +34,13 @@
         <th pSortableColumn="priority">
           {{ priorityLabelTh }} <p-sortIcon field="priority"></p-sortIcon>
         </th>
-        <th pSortableColumn="category">
-          {{ categoryLabelTh }}<p-sortIcon field="category"></p-sortIcon>
+        <th pSortableColumn="categoryId">
+          {{ categoryLabelTh }}<p-sortIcon field="categoryId"></p-sortIcon>
         </th>
-        <th>{{ deadlineLabelTh }}<p-sortIcon></p-sortIcon></th>
-        <th><p-sortIcon></p-sortIcon></th>
+        <th >
+          {{ deadlineLabelTh }}
+        </th>
+        <th></th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-task>
