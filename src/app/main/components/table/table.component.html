@@ -49,7 +49,14 @@
         <td>{{ task.text }}</td>
         <td>{{ task.priority }}</td>
         <td>{{ getCategories(task) }}</td>
-        <td>{{ task.startDate }}<br />{{ task.endDate }}</td>
+
+        <td>
+          <div class="dates">
+            <label>{{ task.startDate | date: "yyyy-MM-dd HH:mm" }}</label
+            ><label>{{ task.endDate | date: "yyyy-MM-dd HH:mm" }}</label>
+          </div>
+        </td>
+
         <td>
           <p-button
             icon="pi pi-pencil"
