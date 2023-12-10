@@ -12,6 +12,7 @@
     <div>
       <app-item  *ngFor="let category of taskCategories" [category]="category"></app-item>
     </div>
-    <p-button class="add" (onClick)="handlerAddBtn()" [label]="addLabelBtn"></p-button>
+    <div class="add" > <input> <p-button (onClick)="handlerAddBtn()" [label]="addLabelBtn"></p-button></div>
+
   </div>
 </p-dialog>
