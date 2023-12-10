@@ -153,6 +153,7 @@ export class EditTaskComponent implements OnInit, OnDestroy {
     const TASK_CATEGORY = this.editTaskForm.get('taskСategory')?.value;
     const TASK_CATEGORY_ID = TASK_CATEGORY ? TASK_CATEGORY.id : null;
 
+
     if (this.id && TEXT && PRIORITY && START_DATE && END_DATE)
       this.taskService.editTask(
         this.id,
