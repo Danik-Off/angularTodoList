@@ -9,7 +9,7 @@ const STORAGE_CATEGORIES_KEY = 'todoCategories-';
 })
 export class TaskCategoriesService {
   categories = new BehaviorSubject<TaskCategory[]>([
-    { id: 'testIdID', title: 'test' },
+    // { id: 'testIdID', title: 'test' },
   ]);
 
   categories$ = this.categories.asObservable();
