@@ -47,7 +47,7 @@ export class TaskService {
     priority: number,
     startDate: Date,
     endDate: Date,
-    taskСategoryId: string,
+    taskCategoryId: string,
   ) {
     const updatedItems = this.allItemsSubject.value.map((item) =>
       item.id === id
@@ -57,7 +57,7 @@ export class TaskService {
             priority,
             startDate,
             endDate,
-            taskCategoryId: taskСategoryId,
+            categoryId:  taskCategoryId,
           }
         : item,
     );
