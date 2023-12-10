@@ -27,19 +27,28 @@ export class AuthService {
   }
 
   register(name: string, login: string, password: string): void {
-    const user: User = {
-      id: crypto.randomUUID() as string,
-      name: name,
-      login: login,
-      password: password,
-    };
+    const user = this.getUsers().find((user) => user.login === login);
+    console.log(user);
 
-    const newUsers = [...this.getUsers(), user];
-    localStorage.setItem(STORAGE_USERS_KEY, JSON.stringify(newUsers));
+    if(!user){
+      const user: User = {
+        id: crypto.randomUUID() as string,
+        name: name,
+        login: login,
+        password: password,
+      };
 
-    this.userSubject.next(user);
-    this.isAuthenticatedSubject.next(true);
-    this.router.navigate(['/']);
+      const newUsers = [...this.getUsers(), user];
+      localStorage.setItem(STORAGE_USERS_KEY, JSON.stringify(newUsers));
+      this.userSubject.next(user);
+      this.isAuthenticatedSubject.next(true);
+      this.router.navigate(['/']);
+
+    }
+    else{
+      alert('Такой пользователь уже существует');
+    }
+
   }
 
   login(login: string, password: string): void {
