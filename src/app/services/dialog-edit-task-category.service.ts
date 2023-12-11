@@ -12,11 +12,11 @@ export class DialogEditTaskCategoryService {
     this.dialogState$ = this.dialogStateSubject.asObservable();
   }
 
-  openDialogEditTask(): void {
+  openDialogEditTaskCategory(): void {
     this.dialogStateSubject.next(true);
   }
 
-  closeDialogEditTask(): void {
+  closeDialogEditTaskCategory(): void {
     this.dialogStateSubject.next(false);
   }
 }
