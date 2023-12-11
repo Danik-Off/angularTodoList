@@ -5,14 +5,18 @@
   [style]="{ maxWidth: '400px' }"
   [draggable]="false"
   [resizable]="false"
-
+  (onHide)="handlerHideDialog()"
 >
   <div class="app-edit-task-categories-form">
-
     <div>
-      <app-item  *ngFor="let category of taskCategories" [category]="category"></app-item>
+      <app-item
+        *ngFor="let category of taskCategories"
+        [category]="category"
+      ></app-item>
     </div>
-    <div class="add" > <input> <p-button (onClick)="handlerAddBtn()" [label]="addLabelBtn"></p-button></div>
-
+    <form class="add" [formGroup]="addCategoryForm">
+      <input type="text" pInputText formControlName="categoryName" />
+      <p-button (onClick)="handlerAddBtn()" [label]="addLabelBtn"></p-button>
+    </form>
   </div>
 </p-dialog>
