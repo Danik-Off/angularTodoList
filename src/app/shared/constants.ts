@@ -26,6 +26,8 @@ export const LABEL_PRIORITY = 'Приоритет';
 export const LABEL_START_DATE = 'Начало:';
 export const LABEL_END_DATE = 'Конец:';
 export const LABEL_CATEGORY = 'Категория';
+export const PLACEHOLDER_PRIORITY = "выберите приоритет";
+export const PLACEHOLDER_CATEGORY = "выберите категорию"
 
 //Login & register
 export const LABEL_LOGIN = 'Логин';
@@ -39,3 +41,4 @@ export const LABEL_REGISTER = 'Регистрация';
 export const LABEL_BUTTON_REGISTER = 'Зарегистрироваться';
 export const LABEL_NAME = 'Имя';
 export const LABEL_CONFIRM_PASSWORD = 'Повторите пароль';
+
