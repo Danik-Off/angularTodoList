@@ -20,6 +20,7 @@ import {
   TH_LABEL_CATEGORY,
   TH_LABEL_DEADLINE,
 } from 'src/app/shared/constants';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-table',
@@ -30,6 +31,7 @@ import {
     TableModule,
     ButtonModule,
     ConfirmDialogModule,
+    InputTextModule,
   ],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
@@ -42,13 +44,11 @@ export class TableComponent implements OnInit, OnDestroy {
   priorityLabelTh: string = TH_LABEL_PRIORITY;
   categoryLabelTh: string = TH_LABEL_CATEGORY;
   deadlineLabelTh: string = TH_LABEL_DEADLINE;
-
-  tasks!: Task[];
-
   selectedTasks!: Task[];
 
   private ngUnsubscribe = new Subject<void>();
-
+  private tasks!: Task[];
+  private filter!: string | null;
   private categories!: TaskCategory[];
 
   constructor(
@@ -58,6 +58,29 @@ export class TableComponent implements OnInit, OnDestroy {
     private taskService: TaskService,
     private categoryService: TaskCategoriesService,
   ) {}
+
+  setFilterForTask(filter: string | null) {
+    this.filter = filter;
+  }
+
+  filtredTasks(): Task[] {
+    if (this.filter) {
+      const lowercaseFilter = this.filter?.toLowerCase();
+      return this.tasks.filter((task) => {
+        const lowercaseTaskName = task.text.toLowerCase();
+        return  lowercaseTaskName.includes(lowercaseFilter);
+      });
+    }
+    return this.tasks;
+  }
+  getTextFromEvent(event: Event): string|null {
+    if (event && event.target) {
+      return (event.target as HTMLInputElement).value;
+    }
+    return null;
+  }
+
+
 
   ngOnInit(): void {
     this.taskService.allItems$
@@ -86,11 +109,11 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   handlerOpenEditorTaskForNew(): void {
-    this.dialogService.openDialogEditTask(null);
+    this.dialogService.openDialogEditTask(true);
   }
 
   handlerOpenEditorTaskCategories(): void {
-    this.dialogCategoriesService.openDialogEditTask();
+    this.dialogCategoriesService.openDialogEditTaskCategory();
   }
 
   handlerSelectedChange(): void {
