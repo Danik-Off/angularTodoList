@@ -5,6 +5,7 @@ height: 100%;
   .head-table{
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
     }
 
 th{
