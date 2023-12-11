@@ -9,11 +9,12 @@ import { CommonModule } from '@angular/common';
 import { TaskCategoriesService } from 'src/app/services/task-categories.service';
 import { TaskCategory } from 'src/app/interfaces/taskCategory';
 import { FormsModule } from '@angular/forms';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-item',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule,InputTextModule],
   templateUrl: './item.component.html',
   styleUrl: './item.component.scss',
 })
