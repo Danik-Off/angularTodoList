@@ -6,6 +6,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../services/auth.service';
 import { LABEL_BUTTON_LOGIN, LABEL_LINK_REGISTER, LABEL_REGISTER_SUBTEXT, TITLE_LOGIN } from '../shared/constants';
+import { LoginForm } from '../interfaces/login-form';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +22,7 @@ export class LoginComponent {
   subtext:string = LABEL_REGISTER_SUBTEXT;
   linkLabel:string = LABEL_LINK_REGISTER;
 
-  loginForm = new FormGroup({
+  loginForm = new FormGroup<LoginForm>({
     login: new FormControl(null),
     password: new FormControl(null),
   });
