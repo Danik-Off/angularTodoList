@@ -5,6 +5,7 @@
   [style]="{ maxWidth: '400px' }"
   [draggable]="false"
   [resizable]="false"
+  (onHide)="handlerHideDialog()"
 >
   <form [formGroup]="editTaskForm" class="app-edit-task-form">
     <span>{{ idLabel }}{{ id ? id : "#" }}</span>
@@ -52,7 +53,7 @@
 
     <div class="btns">
       <p-button
-        (onClick)="handlerCancelBtn()"
+        (onClick)="handlerHideDialog()"
         [label]="buttonLabelCancel"
         severity="danger"
       ></p-button
