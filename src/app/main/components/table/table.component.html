@@ -1,13 +1,16 @@
 <p-confirmDialog></p-confirmDialog>
 <div class="task-table">
   <p-table
+    #dt
     styleClass="p-column-resizer-helper"
-    [value]="tasks"
+    [value]="filtredTasks()"
     [(selection)]="selectedTasks"
     [paginator]="true"
     [rows]="10"
     [rowsPerPageOptions]="[10, 25, 50]"
     (selectionChange)="handlerSelectedChange()"
+    [globalFilterFields]="['text']"
+
   >
     <ng-template pTemplate="caption">
       <div class="head-table">
@@ -20,7 +23,13 @@
           [label]="editTaskCategoriesLabelBtn"
           (onClick)="handlerOpenEditorTaskCategories()"
         ></p-button>
+        <span class="p-input-icon-left ml-auto">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal(getTextFromEvent($event), 'contains')" placeholder="Search keyword" />
+
+        </span>
       </div>
+
     </ng-template>
     <ng-template pTemplate="header">
       <tr>
