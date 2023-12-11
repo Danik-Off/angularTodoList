@@ -23,6 +23,7 @@ import {
   TITLE_EDIT_TASK,
   TITLE_NEW_TASK,
 } from 'src/app/shared/constants';
+import { EditTaskForm } from 'src/app/interfaces/edit-task-form';
 
 @Component({
   selector: 'app-edit-task',
@@ -42,7 +43,7 @@ import {
 export class EditTaskComponent implements OnInit, OnDestroy {
   id: string | null = null;
 
-  editTaskForm = new FormGroup({
+  editTaskForm = new FormGroup<EditTaskForm>({
     done: new FormControl(),
     text: new FormControl(),
     priority: new FormControl(1),
@@ -62,7 +63,7 @@ export class EditTaskComponent implements OnInit, OnDestroy {
   startDateLabel: string = LABEL_START_DATE;
   endDateLabel: string = LABEL_END_DATE;
 
-  visible: boolean = true;
+  visible: boolean = false;
 
   selectedCategory!: TaskCategory[];
 
@@ -82,7 +83,7 @@ export class EditTaskComponent implements OnInit, OnDestroy {
     this.dialogService.dialogState$
       .pipe(takeUntil(this.unsubscribe))
       .subscribe((value) => {
-        if (value) {
+        if ( typeof(value)==="string") {
           this.id = value;
           const TASK = this.taskService.getTask(value);
           const CATEGORY =
@@ -96,11 +97,11 @@ export class EditTaskComponent implements OnInit, OnDestroy {
             endDate: new Date(TASK.endDate),
             taskСategory: CATEGORY,
           });
+
         } else {
           this.id = null;
         }
-
-         this.visible = !this.visible;
+        this.visible = Boolean(value);
       });
 
     this.categoriesService.categories$
@@ -109,10 +110,11 @@ export class EditTaskComponent implements OnInit, OnDestroy {
         this.taskCategories = val;
       });
   }
-
-  handlerCancelBtn(): void {
-    this.visible = false;
+  handlerHideDialog(): void {
+    this.dialogService.closeDialogEditTask();
   }
+
+
 
   handlerSaveBtn(): void {
     if (this.id) {
@@ -120,7 +122,7 @@ export class EditTaskComponent implements OnInit, OnDestroy {
     } else {
       this.createNew();
     }
-    this.visible = false;
+    this.handlerHideDialog()
   }
 
   createNew(): void {
