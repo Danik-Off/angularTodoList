@@ -3,6 +3,7 @@
     {{ editedText}}
   </label>
   <input
+    pInputText
     (keydown.enter)="onEditEnd()"
     (blur)="onEditEnd()"
     [hidden]="!isEdited"
