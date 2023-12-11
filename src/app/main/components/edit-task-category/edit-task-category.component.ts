@@ -33,7 +33,7 @@ import { AddCategoryForm } from 'src/app/interfaces/add-category-form';
     ItemComponent,
     InputTextModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   templateUrl: './edit-task-category.component.html',
   styleUrl: './edit-task-category.component.scss',
@@ -47,7 +47,7 @@ export class EditTaskCategoryComponent implements OnInit, OnDestroy {
   taskCategories: TaskCategory[] = [];
 
   addCategoryForm = new FormGroup<AddCategoryForm>({
-    categoryName: new FormControl(null,Validators.required),
+    categoryName: new FormControl(null, Validators.required),
   });
 
   private ngUnsubscribe = new Subject<void>();
@@ -72,9 +72,11 @@ export class EditTaskCategoryComponent implements OnInit, OnDestroy {
   }
 
   handlerAddBtn(): void {
-    const CATEGORY_NAME = this.addCategoryForm.get('categoryName')?.value;
-    this.taskCategoriesService.addCategory(CATEGORY_NAME);
+    const CATEGORY_INPUT = this.addCategoryForm.get('categoryName')?.value;
+    this.taskCategoriesService.addCategory(CATEGORY_INPUT);
+    this.addCategoryForm.reset();
   }
+
   handlerHideDialog(): void {
     this.dialogService.closeDialogEditTaskCategory();
   }
