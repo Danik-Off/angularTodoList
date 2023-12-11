@@ -13,6 +13,14 @@ import {
   BUTTON_LABEL_ADD,
   TITLE_EDIT_TASK_CATEGORY,
 } from 'src/app/shared/constants';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { AddCategoryForm } from 'src/app/interfaces/add-category-form';
 @Component({
   selector: 'app-edit-task-category',
   standalone: true,
@@ -23,6 +31,9 @@ import {
     DialogModule,
     InputTextModule,
     ItemComponent,
+    InputTextModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   templateUrl: './edit-task-category.component.html',
   styleUrl: './edit-task-category.component.scss',
@@ -34,6 +45,10 @@ export class EditTaskCategoryComponent implements OnInit, OnDestroy {
   visible: boolean = true;
 
   taskCategories: TaskCategory[] = [];
+
+  addCategoryForm = new FormGroup<AddCategoryForm>({
+    categoryName: new FormControl(null,Validators.required),
+  });
 
   private ngUnsubscribe = new Subject<void>();
 
@@ -57,7 +72,11 @@ export class EditTaskCategoryComponent implements OnInit, OnDestroy {
   }
 
   handlerAddBtn(): void {
-    this.taskCategoriesService.addCategory('default');
+    const CATEGORY_NAME = this.addCategoryForm.get('categoryName')?.value;
+    this.taskCategoriesService.addCategory(CATEGORY_NAME);
+  }
+  handlerHideDialog(): void {
+    this.dialogService.closeDialogEditTaskCategory();
   }
 
   ngOnDestroy(): void {
