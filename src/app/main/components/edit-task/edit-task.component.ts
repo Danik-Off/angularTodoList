@@ -20,6 +20,8 @@ import {
   LABEL_PRIORITY,
   LABEL_START_DATE,
   LABEL_TEXT,
+  PLACEHOLDER_CATEGORY,
+  PLACEHOLDER_PRIORITY,
   TITLE_EDIT_TASK,
   TITLE_NEW_TASK,
 } from 'src/app/shared/constants';
@@ -62,6 +64,8 @@ export class EditTaskComponent implements OnInit, OnDestroy {
   priorityLabel: string = LABEL_PRIORITY;
   startDateLabel: string = LABEL_START_DATE;
   endDateLabel: string = LABEL_END_DATE;
+  placeholderCategory: string = PLACEHOLDER_CATEGORY;
+  placeholderPriority: string = PLACEHOLDER_PRIORITY;
 
   visible: boolean = false;
 
