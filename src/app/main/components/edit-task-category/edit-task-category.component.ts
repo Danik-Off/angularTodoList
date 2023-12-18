@@ -47,7 +47,7 @@ export class EditTaskCategoryComponent implements OnInit, OnDestroy {
   taskCategories: TaskCategory[] = [];
 
   addCategoryForm = new FormGroup<AddCategoryForm>({
-    categoryName: new FormControl(null, Validators.required),
+    categoryName: new FormControl<string|null>(null, Validators.required),
   });
 
   private ngUnsubscribe = new Subject<void>();
@@ -73,7 +73,7 @@ export class EditTaskCategoryComponent implements OnInit, OnDestroy {
 
   handlerAddBtn(): void {
     const CATEGORY_INPUT = this.addCategoryForm.get('categoryName')?.value;
-    this.taskCategoriesService.addCategory(CATEGORY_INPUT);
+    this.taskCategoriesService.addCategory(CATEGORY_INPUT as string);
     this.addCategoryForm.reset();
   }
 

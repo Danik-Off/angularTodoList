@@ -17,12 +17,11 @@ export class TaskService {
     this.allItems$ = this.allItemsSubject.asObservable();
   }
 
-  addTask(
-    text: string,
+  addTask(text: string,
     priority: number,
     startDate: Date,
     endDate: Date,
-    categoryId: string,
+    categoryId: string|null,
   ): void {
     const newItem: Task = {
       id: crypto.randomUUID(),
@@ -47,7 +46,7 @@ export class TaskService {
     priority: number,
     startDate: Date,
     endDate: Date,
-    taskCategoryId: string,
+    taskCategoryId: string|null,
   ) {
     const updatedItems = this.allItemsSubject.value.map((item) =>
       item.id === id

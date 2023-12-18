@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
+import {FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PasswordModule } from 'primeng/password';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
@@ -23,8 +23,8 @@ export class LoginComponent {
   linkLabel:string = LABEL_LINK_REGISTER;
 
   loginForm = new FormGroup<LoginForm>({
-    login: new FormControl(null),
-    password: new FormControl(null),
+    login: new FormControl<string|null>(null,[Validators.required]),
+    password: new FormControl<string|null>(null,[Validators.required]),
   });
 
   constructor(private authService:AuthService){}

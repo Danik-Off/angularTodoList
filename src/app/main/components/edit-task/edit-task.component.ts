@@ -9,7 +9,7 @@ import { DialogEditTaskService } from 'src/app/services/dialog-edit-task.service
 
 import { TaskService } from 'src/app/services/task.service';
 import { CalendarModule } from 'primeng/calendar';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TaskCategoriesService } from 'src/app/services/task-categories.service';
 import { Subject, takeUntil } from 'rxjs';
 import {
@@ -46,9 +46,9 @@ export class EditTaskComponent implements OnInit, OnDestroy {
   id: string | null = null;
 
   editTaskForm = new FormGroup<EditTaskForm>({
-    done: new FormControl(),
-    text: new FormControl(),
-    priority: new FormControl(1),
+    done: new FormControl<boolean|null>(false),
+    text: new FormControl<string|null>(null,[Validators.required]),
+    priority: new FormControl<number|null>(0),
     startDate: new FormControl(new Date(Date.now())),
     endDate: new FormControl(new Date(Date.now())),
     taskСategory: new FormControl(),
@@ -90,15 +90,15 @@ export class EditTaskComponent implements OnInit, OnDestroy {
         if ( typeof(value)==="string") {
           this.id = value;
           const TASK = this.taskService.getTask(value);
-          const CATEGORY =
-            this.categoriesService.getCategory(TASK.categoryId) ?? 'default';
+          const categoryId =  TASK.categoryId??"";
+          const CATEGORY = this.categoriesService.getCategory(categoryId) ?? 'default';
 
           this.editTaskForm.setValue({
             done: TASK.done,
             priority: TASK.priority,
             text: TASK.text,
-            startDate: new Date(TASK.startDate),
-            endDate: new Date(TASK.endDate),
+            startDate: new Date(TASK.startDate as Date),
+            endDate: new Date(TASK.endDate as Date),
             taskСategory: CATEGORY,
           });
 
@@ -121,6 +121,7 @@ export class EditTaskComponent implements OnInit, OnDestroy {
 
 
   handlerSaveBtn(): void {
+    console.log(this.id)
     if (this.id) {
       this.editTask();
     } else {
@@ -131,53 +132,45 @@ export class EditTaskComponent implements OnInit, OnDestroy {
 
   createNew(): void {
     this.titleDialog = TITLE_NEW_TASK;
-    const TEXT = this.editTaskForm.get('text')?.value;
-    const PRIORITY = this.editTaskForm.get('priority')?.value;
-    const START_DATE = this.editTaskForm.get('startDate')?.value;
-    const END_DATE = this.editTaskForm.get('endDate')?.value;
-    const TASK_CATEGORY = this.editTaskForm.get('taskСategory')?.value;
-    const TASK_CATEGORY_ID = TASK_CATEGORY ? TASK_CATEGORY.id : null;
-
-    if (TEXT && PRIORITY && START_DATE && END_DATE) {
+   
+    if (this.editTaskForm.valid) {
+      const formValue = this.editTaskForm.getRawValue();
+    
       this.taskService.addTask(
-        TEXT,
-        PRIORITY,
-        new Date(START_DATE),
-        new Date(END_DATE),
-        TASK_CATEGORY_ID,
+        formValue.text as string,
+        formValue.priority as number,
+        new Date(formValue.startDate as Date),
+        new Date(formValue.endDate as Date),
+        formValue.taskСategory?.id??null
       );
     }
   }
 
   editTask(): void {
+  
     this.titleDialog = TITLE_EDIT_TASK;
 
-    const TEXT = this.editTaskForm.get('text')?.value;
-    const PRIORITY = this.editTaskForm.get('priority')?.value;
-    const START_DATE = this.editTaskForm.get('startDate')?.value;
-    const END_DATE = this.editTaskForm.get('endDate')?.value;
-    const TASK_CATEGORY = this.editTaskForm.get('taskСategory')?.value;
-    const TASK_CATEGORY_ID = TASK_CATEGORY ? TASK_CATEGORY.id : null;
-
-
-    if (this.id && TEXT && PRIORITY && START_DATE && END_DATE)
+    if (this.editTaskForm.valid) {
+      const formValue = this.editTaskForm.getRawValue();
+    
       this.taskService.editTask(
-        this.id,
-        TEXT,
-        PRIORITY,
-        new Date(START_DATE),
-        new Date(END_DATE),
-        TASK_CATEGORY_ID,
+        this.id as string,
+        formValue.text as string,
+        formValue.priority as number,
+        new Date(formValue.startDate as Date),
+        new Date(formValue.endDate as Date),
+        formValue.taskСategory?.id??null
       );
+    }
   }
   clearForm(): void {
     this.editTaskForm.setValue({
       done: false,
-      priority: null,
-      text: null,
+      priority: 0,
+      text: "",
       startDate: new Date(Date.now()),
       endDate: new Date(Date.now()),
-      taskСategory: null,
+      taskСategory:null,
     });
   }
 

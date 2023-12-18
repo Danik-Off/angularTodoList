@@ -50,17 +50,17 @@ export class RegisterComponent {
 
   constructor(private authService: AuthService) {
     this.registerForm = new FormGroup<RegisterForm>({
-      name: new FormControl(null, [
+      name: new FormControl<string|null>(null, [
         Validators.required,
         Validators.minLength(2),
         Validators.maxLength(10),
       ]),
-      login: new FormControl(null, [
+      login: new FormControl<string|null>(null, [
         Validators.required,
         Validators.minLength(5),
       ]),
-      password: new FormControl(null, [Validators.required]),
-      repeatPassword: new FormControl(null, [
+      password: new FormControl<string|null>(null, [Validators.required]),
+      repeatPassword: new FormControl<string|null>(null, [
         Validators.required,
         checkPasswords,
       ]),
@@ -68,6 +68,7 @@ export class RegisterComponent {
   }
 
   handlerRegisterBtn(): void {
+    
     if (this.registerForm.valid) {
       const NAME = this.registerForm.get('name')?.value;
       const LOGIN = this.registerForm.get('login')?.value;

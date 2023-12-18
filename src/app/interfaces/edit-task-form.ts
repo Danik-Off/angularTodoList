@@ -2,11 +2,10 @@ import { FormControl } from '@angular/forms';
 import { TaskCategory } from './taskCategory';
 
 export interface EditTaskForm {
-  done: FormControl<boolean>;
-  text: FormControl<string>;
-  priority: FormControl<number>;
-  startDate: FormControl<Date>;
-  endDate: FormControl<Date>;
-  taskСategory: FormControl<TaskCategory>;
-
+  done: FormControl<boolean|null>;
+  text: FormControl<string|null>;
+  priority: FormControl<number|null>;
+  startDate: FormControl<Date|null>;
+  endDate: FormControl<Date|null>;
+  taskСategory: FormControl<TaskCategory|null>;
 }

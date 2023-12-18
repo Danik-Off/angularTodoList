@@ -26,7 +26,7 @@ import { TaskCategoriesService } from '../services/task-categories.service';
   styleUrl: './main.component.scss',
 })
 export class MainComponent implements OnInit, OnDestroy {
-  userName$!: string;
+  userName!: string;
   ngUnsubscribe: Subject<void> = new Subject<void>();
 
   constructor(
@@ -40,7 +40,7 @@ export class MainComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((user) => {
         if (user) {
-          this.userName$ = user.name;
+          this.userName = user.name;
           this.taskService.loadTasks(user);
           this.taskCategoryService.loadCategory(user);
         }
